@@ -2,6 +2,7 @@
 //    Using functions from: Erika Fluffy, 
 //    Started work: April 2nd, 2014
 //    Last Updated: March 31st, 2016
+//
 /*
 Copyright (c) 2016, Martin Øverby (Tenaar Feiri)
 All rights reserved.
@@ -175,7 +176,7 @@ string version = "r20001"; // Our titler version.
 
 integer DEBUG = FALSE;
 
-string name = "Neckbeard Titler - v"; // Titler's name.
+string name = "Neckbeard RP Tool - "; // Titler's name.
 
 // ### Functions for online connectivity ### //
 

@@ -125,13 +125,13 @@ funcBackupRestore(string cN)
         string data;// = llDumpList2String(names, "\n") + "\n<!>"; //+ llDumpList2String(slots, "\n");
         integer x = 0;
         integer y = (llGetListLength(names) - 1);
-		for(;x<=y;x++)
-		{
-			data += "[name]"+llList2String(names, x)+"\n";
-		}
-		data += "<!>";
-		x = 0;
-		y = (llGetListLength(slots) - 1);
+        for(;x<=y;x++)
+        {
+            data += "[name]"+llList2String(names, x)+"\n";
+        }
+        data += "<!>";
+        x = 0;
+        y = (llGetListLength(slots) - 1);
         for(;x<=y;x++)
         {
             data += "\n";
@@ -148,15 +148,15 @@ funcBackupRestore(string cN)
         string out = "Copy everything below this line into your backups notecard (do not include the line)\nYou can safely copy the chat as is, chatter name and all; the tool is configured to only pick relevant data. \n ================= \n";
         
         llOwnerSay(out);
-		llOwnerSay("\n" + llList2String(llParseString2List(data, ["<!>"], []), 0) + "<!>");
-		list temp = llParseString2List(llList2String(llParseString2List(data, ["<!>"], []), 1), ["@@@"], []);
-		x = 0;
-		y = (llGetListLength(temp) - 1);
-		for(;x<=y;x++)
-		{
-			llOwnerSay("\n" + llList2String(temp, x));
-		}
-		
+        llOwnerSay("\n" + llList2String(llParseString2List(data, ["<!>"], []), 0) + "<!>");
+        list temp = llParseString2List(llList2String(llParseString2List(data, ["<!>"], []), 1), ["@@@"], []);
+        x = 0;
+        y = (llGetListLength(temp) - 1);
+        for(;x<=y;x++)
+        {
+            llOwnerSay("\n" + llList2String(temp, x));
+        }
+        
         
     }
     // Otherwise, we're restoring.
@@ -218,7 +218,7 @@ funcParseLoadData(string data)
     {
         if(posInList <= (llGetListLength(slots) - 1) && llGetSubString(data, 0, 5) == "[name]")
         {
-			data = llStringTrim(llDeleteSubString(data, 0, 5), STRING_TRIM);
+            data = llStringTrim(llDeleteSubString(data, 0, 5), STRING_TRIM);
             names = llListReplaceList(names, [data], posInList, posInList);
             posInList = (posInList + 1); // Advance list position.
         }
