@@ -1,0 +1,30 @@
+This is an instructional guide on operating character backups using notecards.
+
+By default, the name of the backup your tool will always defer to when you do "/44 restore" x2, but you can change that using the template command.
+
+Example: /44 template My New Backup
+
+Then whenever you do just "/44 restore" twice, it will by default look for the card named "My New Backup".
+
+You can also manually select which card to read by doing "/44 restore Bob" -- where "Bob" is the name of the notecard you are targeting. You only have to specify the card name once. When you type "/44 restore" after that, it will either load the card Bob, or it will inform you that the card does not exist.
+
+### HOW TO ###
+The notecard has to be in your object inventory in order to load it.
+
+To easily access your object inventory, attach your Neckbeard RP Tool Pro Titler/Chatter by using the Wear or Add command. It will attach to your Skull by default.
+Once attached, you will see that the RP Tool's name is now bolded in your inventory (the text will be thicker than the others). Right-click your RP Tool inventory listing, and select Edit in the menu that appears. This will open your RP Tool up in Edit Mode.
+In Edit Mode, you will find a lot of options but you will want to look for the tab that says "Content" and click it. Allow the object inventory to fully load (it will flicker to blank briefly before it is fully loaded).
+
+By default, the items you see are the scripts, Neckbeard RP Tool Help, and a notecard called "backup". This is the default notecard. Double-click it to open and edit it directly, or drag it to your inventory which will create an identical copy of it.
+
+
+To save a backup, you will now have to enter a chat command twice: /44 backup
+
+This will cause the RP Tool to chat to you a lot of information. Open the chat and copy everything the object says between these lines: ===START=== and ===END===
+You do not have to edit anything, the RP Tool will filter out the information on its own.
+
+Replace the contents of the notecard (if there is anything in it), and paste the information you copied from the chat into it. Save, wait for it to flicker, and then close. If it appears as though the notecard became blank when you saved, don't worry; it still saved and you may safely close it.
+
+If you edited a notecard in your inventory, you will have to either replace the "backup" notecard (remember to specify your new default card name if necessary, as detailed above!), or just drag it into the object inventory.
+
+You may have multiple different backups in your inventory, in practice allowing for virtually infinite character slots.
