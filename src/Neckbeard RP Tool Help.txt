@@ -166,6 +166,9 @@ By default, when you restore, the restoration function looks for a card called "
 /44 restore cardname    ->  overrules the default card choice, loading from a card of your own choosing.
 
 
+When you back up your characters, the tool will send you a series of independent chats with data. You can safely copy it all, including object names and timestamps, into the backups notecard; the script filters out the data it doesn't want so as long as it's all in the correct order, it won't matter what kind of spam comes in between.
+
+
 --- HOW DO I SAVE AND LOAD CHARACTERS?
 
 The NRPTP (Neckbeard RP Tool Pro) supports up to 12 saved character slots. To save a character, you either hit SAVE on the HUD, or type "/1 save" in the chat. This will open up a menu for you with slots onto which you may store your currently active character. Which character is stored where is listed in the description above the buttons.
