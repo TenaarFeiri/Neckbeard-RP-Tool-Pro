@@ -28,3 +28,77 @@ Replace the contents of the notecard (if there is anything in it), and paste the
 If you edited a notecard in your inventory, you will have to either replace the "backup" notecard (remember to specify your new default card name if necessary, as detailed above!), or just drag it into the object inventory.
 
 You may have multiple different backups in your inventory, in practice allowing for virtually infinite character slots.
+
+
+### EXAMPLE OUTPUT ###
+
+Here is what an output of the backup feature may look like:
+
+
+[16:49:02] (wear/add) Neckbeard RP Tool Pro Titler/Chatter r20001: Please type "/44 backup" again (without quotes) to perform the backup. You have 10 seconds.
+[16:49:03] (wear/add) Neckbeard RP Tool Pro Titler/Chatter r20001: Copy everything between START and END (including chatter names) 
+ ===START=== 
+
+[16:49:03] (wear/add) Neckbeard RP Tool Pro Titler/Chatter r20001: 
+[name]Talia
+[name]Amy Xarlen
+[name]empty
+[name]empty
+[name]empty
+[name]empty
+[name]empty
+[name]empty
+[name]empty
+[name]empty
+[name]empty
+[name]empty
+<!>
+[16:49:04] (wear/add) Neckbeard RP Tool Pro Titler/Chatter r20001: 
+
+[const]nullc~cSpecies:c~cMood:c~cStatus:c~cBody:c~cScent:c~cCurrently:c~cEnergy:
+[datas]Taliat~tKitsune (nine-tailed).t~tGood.t~tOK..t~tHealthy & strong.t~tFoxy.t~tIdle.t~t100t~tont~t5t~t100t~t255,0,0
+[16:49:04] (wear/add) Neckbeard RP Tool Pro Titler/Chatter r20001: 
+
+[const]nullc~cSpecies:c~cMood:c~cStatus:c~cBody:c~cScent:c~cCurrently:c~cEnergy:
+[datas]Amy Xarlent~tKitsune (nine-tailed).t~tGood.t~tOKt.t~tHealthy & strong.t~tFoxy.t~tIdle.t~t100t~tont~t5t~t100t~t255,0,0
+[16:49:04] (wear/add) Neckbeard RP Tool Pro Titler/Chatter r20001: 
+
+[const]null
+[datas]nullnull
+[16:49:04] (wear/add) Neckbeard RP Tool Pro Titler/Chatter r20001: 
+
+[const]null
+[datas]nullnull
+[16:49:04] (wear/add) Neckbeard RP Tool Pro Titler/Chatter r20001: 
+
+[const]null
+[datas]nullnull
+[16:49:04] (wear/add) Neckbeard RP Tool Pro Titler/Chatter r20001: 
+
+[const]null
+[datas]nullnull
+[16:49:04] (wear/add) Neckbeard RP Tool Pro Titler/Chatter r20001: 
+
+[const]null
+[datas]nullnull
+[16:49:04] (wear/add) Neckbeard RP Tool Pro Titler/Chatter r20001: 
+
+[const]null
+[datas]nullnull
+[16:49:04] (wear/add) Neckbeard RP Tool Pro Titler/Chatter r20001: 
+
+[const]null
+[datas]nullnull
+[16:49:04] (wear/add) Neckbeard RP Tool Pro Titler/Chatter r20001: 
+
+[const]null
+[datas]nullnull
+[16:49:04] (wear/add) Neckbeard RP Tool Pro Titler/Chatter r20001: 
+
+[const]null
+[datas]nullnull
+[16:49:04] (wear/add) Neckbeard RP Tool Pro Titler/Chatter r20001: 
+
+[const]null
+[datas]nullnull
+[16:49:04] (wear/add) Neckbeard RP Tool Pro Titler/Chatter r20001: ===END===
