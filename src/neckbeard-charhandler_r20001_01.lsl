@@ -145,8 +145,10 @@ funcBackupRestore(string cN)
         connect = llHTTPRequest(server, [HTTP_BODY_MAXLENGTH, 16000, HTTP_METHOD, "POST", HTTP_MIMETYPE, "application/x-www-form-urlencoded"], out);
         llOwnerSay("Connecting to server..."); */
         
-        string out = "Copy everything below this line into your backups notecard (do not include the line)\nYou can safely copy the chat as is, chatter name and all; the tool is configured to only pick relevant data. \n ================= \n";
+        string out = "Copy everything between START and END (including chatter names) \n ===START=== \n";
         
+		// Because of Second Life's limitations to object chat bytelength (1024 bytes ASCII or 512 bytes UTF characters),
+		// this has to be done in a very heavy-handed way.
         llOwnerSay(out);
         llOwnerSay("\n" + llList2String(llParseString2List(data, ["<!>"], []), 0) + "<!>");
         list temp = llParseString2List(llList2String(llParseString2List(data, ["<!>"], []), 1), ["@@@"], []);
@@ -156,6 +158,7 @@ funcBackupRestore(string cN)
         {
             llOwnerSay("\n" + llList2String(temp, x));
         }
+		llOwnerSay("===END===");
         
         
     }
