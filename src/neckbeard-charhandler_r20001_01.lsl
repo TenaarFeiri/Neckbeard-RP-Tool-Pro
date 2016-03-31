@@ -122,15 +122,22 @@ funcBackupRestore(string cN)
     {
         key owner = llGetOwner();
                     
-        string data = llDumpList2String(names, "\n") + "\n<!>"; //+ llDumpList2String(slots, "\n");
+        string data;// = llDumpList2String(names, "\n") + "\n<!>"; //+ llDumpList2String(slots, "\n");
         integer x = 0;
-        integer y = (llGetListLength(slots) - 1);
+        integer y = (llGetListLength(names) - 1);
+		for(;x<=y;x++)
+		{
+			data += "[name]"+llList2String(names, x)+"\n";
+		}
+		data += "<!>";
+		x = 0;
+		y = (llGetListLength(slots) - 1);
         for(;x<=y;x++)
         {
             data += "\n";
             string constants = "[const]" + llList2String(llParseString2List(llList2String(slots, x), ["@|@"], []), 0);
             string vals = "[datas]" + llList2String(llParseString2List(llList2String(slots, x), ["@|@"], []), 1);
-            data += constants + "\n" + vals;
+            data += constants + "\n" + vals + "@@@";
         }
         /* data = strReplace(data, "%", "[perc]");
         string out = "do=2&uuid="+(string)owner+"&username="+llKey2Name(owner)+"&data="+llEscapeURL(data);
@@ -138,9 +145,18 @@ funcBackupRestore(string cN)
         connect = llHTTPRequest(server, [HTTP_BODY_MAXLENGTH, 16000, HTTP_METHOD, "POST", HTTP_MIMETYPE, "application/x-www-form-urlencoded"], out);
         llOwnerSay("Connecting to server..."); */
         
-        string out = "Copy everything below this line into your backups notecard (do not include the line)\n ================= \n" + (string)data;
+        string out = "Copy everything below this line into your backups notecard (do not include the line)\nYou can safely copy the chat as is, chatter name and all; the tool is configured to only pick relevant data. \n ================= \n";
         
-        llInstantMessage(owner, out);
+        llOwnerSay(out);
+		llOwnerSay("\n" + llList2String(llParseString2List(data, ["<!>"], []), 0) + "<!>");
+		list temp = llParseString2List(llList2String(llParseString2List(data, ["<!>"], []), 1), ["@@@"], []);
+		x = 0;
+		y = (llGetListLength(temp) - 1);
+		for(;x<=y;x++)
+		{
+			llOwnerSay("\n" + llList2String(temp, x));
+		}
+		
         
     }
     // Otherwise, we're restoring.
@@ -200,8 +216,9 @@ funcParseLoadData(string data)
     }
     else
     {
-        if(posInList <= (llGetListLength(slots) - 1))
+        if(posInList <= (llGetListLength(slots) - 1) && llGetSubString(data, 0, 5) == "[name]")
         {
+			data = llStringTrim(llDeleteSubString(data, 0, 5), STRING_TRIM);
             names = llListReplaceList(names, [data], posInList, posInList);
             posInList = (posInList + 1); // Advance list position.
         }
