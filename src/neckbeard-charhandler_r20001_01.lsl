@@ -204,7 +204,7 @@ funcParseLoadData(string data)
         else if(llGetSubString(data, 0, 6) == "[datas]")
         {
             data = llStringTrim(llDeleteSubString(data, 0, 6), STRING_TRIM);
-            input += data;
+            //input += data;
             if(posInList <= (llGetListLength(slots) - 1))
             {
                 input += data;
