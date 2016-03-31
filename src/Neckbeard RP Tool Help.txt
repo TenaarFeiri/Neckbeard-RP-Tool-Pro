@@ -1,0 +1,309 @@
+Please be advised that this is closed alpha. There may be bugs and shortcomings prevalent throughout the tool.
+If you discover any weird behaviour, possible bugs & so on, please don't hesitate to report them to Tenaar Feiri (preferably by notecard; my IMs get capped).
+Please also feel free to provide any other feedback you may have to share!
+
+
+Please also note that there is no lite version of the HUD yet. It's coming, but probably closer to release.
+
+~~~~~~~~
+
+Written for version: r20001
+
+
+Hi there and thank you for considering the Neckbeard RP Tool Pro for your roleplaying needs.
+
+The Neckbeard RP Tool Pro is a considerably powerful multi-purpose, modular tool that is designed to be appropriate for any & all RP environment regardless of genre & RP ability. It offers built-in support for all Neckbeard features such as the weather system, the LFRP system & the Neckbeard timekeeper. Additionally, you can further expand the tool with new modules by simply attaching them to your HUD; the tool is specifically designed to be expandable without compromising the default functionality. The tool is also fully functional without the HUD (save the extra modules, that cannot be attached to the worn titler), and responds equally well to chat commands & HUD inputs.
+
+So without further ado, I shall walk you through how to manipulate the HUD step-by-step in this section, and then I will list all the different chat commands & their functions at the end.
+
+
+If you wish to skip the tutorial, hit CTRL+F & search for "##=> Functions" (without the quotes).
+
+
+
+##=> TUTORIAL!
+
+When you attach the titler for the first time, you should see something like this above your avatar's head in white text:
+
+        Name: My name
+        Species: My species
+        Mood: My mood
+        Status: My status
+        Body: My body
+        Scent: My scent
+        Currently: My current action
+        Energy: 100%
+
+This is the default setting for every new RP tool (also one which it reverts to when it's reset).
+
+Those are an awful lot of lines, don't you think? Well luckily, they're very easy to customize! To start with, you can change each one by typing either "/1 changeconstant" or "/1 changetitle" in your local chat & hit Enter. This will bring up a dialog menu from which you can select what to change, which will in turn give you a text box to type in. Don't forget to hit "Submit" when you're done!
+
+But whoah now! What's the difference between "/1 changeconstant" & "/1 changetitle"? What are constants & what are titles?
+Well, that's also simple!
+
+--- HOW DO THE TITLES WORK?
+
+The titler consists of eight (8) constants, and eight (8) titles, all side by side. Take a look at the illustration of the titles above. You'll notice that the titles are each divided into constants: the constant is always on the LEFT side of the line (unless it's hidden -- more on that later), and the title is always on the RIGHT side of the line (also unless it's hidden).
+
+In the case of the first line: "Name:" is a constant, "My name" is a title. By changing the constant "Name:" to "I", the resulting output would be: "I My name".
+Now if you also change the title to "am a person", the resulting output would be: "I am a person".
+Remember that the first line in the title, that is "title1" which comes after the constant "Name:" in the illustration above, is your character name. Whatever replaces "My name" is going to be the name your titler will chat with when using the chat commands.
+
+Fascinating right?
+
+Keep in mind that you can also use chat commands to change titles and constants.
+The command to change constants is "/1 const1-8". But don't type "const1-8" in the chat as it's shown here; "const1-8" actually means that there are 8 individual constants you can edit. For instance, typing "/1 const1-8 Hello" will result in an error, because the titler will look for the constant with the number "1-8", and complain when it cannot find it. You need to be specific: const1 in the illustrated example above, would be "Name:" or, as we changed it during the tutorial, "I". Const8 would be "Energy:". Between those two, we have 6 other constants, so say, if you wanted to change constant "Status:" to something else, you would type: "/1 const4 A constant"
+
+Changing the titles is much easier! If the respective constant is just one word (such as "Name:"), then you simply have to type "/1 name John Smith", and the title with the constant "Name:" will be updated. In this case, typing that would change "My name" to "John Smith". Notice the absence of a colon in the chat command. The titler automatically disregards colons when looking for the title you're telling it to change. "/1 name: John Smith" works, too.
+Similar to the constants' commands, you can also use "title1" through "title8" to change the title values.
+
+Additionally, if you have a constant like "My Species" instead of just "Species", you can update the value of that title like this: /1 my_species Human!
+
+
+The constant and the title will ALWAYS have a whitespace between them -- that is "space" to you non-techy folk. The same space that you get by hitting spacebar on your keyboard, in other words.
+
+But now you have probably noticed that the colon you say in the constant when it was "Name:" is gone! That is because the constants do not append a colon on their own, allowing you to use them for whatever you like. In effect, it's like having 8 titles to work with, only twice that!
+
+Now, what's this "Energy:", you might ask?
+That is supposed to be the power pool of your character. Kind of like MP from Final Fantasy, Mana from various other games, etc. Basically, its intended function is to be an indicator of how much energy your character has to do various things such as casting magic spells. That doesn't need to be its only function though; it can also be a health indicator, or indicate, well...  how much you have left of anything! The percent is optional, but we'll get to that a bit later in the tutorial when we get to energy management.
+You can also convert the energy title into a normal title just by giving it a value that's not a number, but that will disable regeneration, etc.
+
+
+--- CAN I CUSTOMIZE THE TITLER'S APPEARANCE?
+
+Yes! The fantastic thing about the RP tool is that the titler's appearance is almost completely mutable! You can change the colours & layout a little bit. First let's talk about the most obvious!
+
+To change the colour of your titles, you simply type in something like "/1 color red", and the titles will change into red. If you want to have your own colour & not one of the preset colour variations using RGB, you simply type in something like: "/1 color 255 123 45". Without the quotes, of course!
+The color command will automatically detect if you type in a preset colour or a RGB value on its own, so you won't need to worry at all about finding the "colorrgb" command that was present in the Lismore RP Tool, this tool's predecessor.
+
+If you for some reason prefer to have the 1st and 2nd line of the titler separated by a comma instead of a linebreak, you can do so by typing "/1 comma". This is a toggleable command, so typing "/1 comma" again will arrange the lines like they were before you toggled it.
+
+If you toggle comma separation on, your titler should look like this:
+
+    Name: My name, Species: My species
+                Mood: My mood
+                Status: My status
+                Body: My body
+                Scent: My scent
+                Currently: My current action
+                Energy: 100%
+                
+                
+This is useful when you'd like to have some sort of title appending your character's name, or just for when you like the look of it.
+Additionally, if you edit titles (and constants!) using the "/1 changetitle" or "/1 changeconstant" commands, you have the ability to insert additional linebreaks by hitting enter while typing in the text box. Beware though, this can break the titler & demand that you reload the character from a save file. Experiment & find what works best for you!
+
+You can also hide constants and titles by changing them to "hide" or "none".
+
+Additionally, you can even edit the opacity of that awesome text you now have over you head, to make it 8000% more awesome! You do this by using the command "alpha".
+
+"/1 alpha 50" will make your titler text 50% invisible. "/1 alpha 100" will make it completely visible. "/1 alpha 0" will make it completely INvisible!
+You can also use "/1 alpha hide" to completely hide the titler text, & "/1 alpha show" to make it visible again. Useful for when you don't want your text over your head, but feel just too dang lazy to detach it. Or if LL is doing asset maintenance & you don't want to risk being unable to re-attach the tool again.
+
+
+--- DOES IT HAVE AN OOC AND AFK TAG?
+
+Yes! You can even customize your own little OOC and AFK message. By default, typing "/1 ooc" or "/1 afk" will just show you as OOC or AFK respectively. You can, however, add a little message to show on it by doing this:
+"/1 ooc A message"
+"/1 afk Another message!"
+Try it out; the titler will remember your message for the next time you go afk or ooc. You can also remove that message by doing "/1 afk hide" & "/1 ooc hide" respectively. You can also use "none" instead of "hide".
+
+To go back IC, you simply have to do "/1 back" or "/1 ic".
+
+Page 1 of the HUD also comes with buttons for your convenience.
+
+
+--- HOW DOES REGENERATION WORK?
+
+That is simple, too! For regeneration you'll use post regens which trigger every time you post -- assuming 2 minutes have passed since you posted last time.
+
+Post regen is activated by doing "/1 postregen x y", where x is the amount you want to regenerate per post, and y is the maximum amount of energy you want to have. Beware that postregen works *only* with the built-in chatter that comes with this RP tool, and it will not register any other chatters you've got.
+
+
+
+--- HOW DO I REMOVE THE PERCENTAGE SYMBOL FROM THE ENERGY BAR?
+
+The command to remove the percentage symbol from the energy bar is: "/1 percentage off"
+Conversely, to add it again: "/1 percentage on"
+
+
+--- HOW TO SHOW MY MAXIMUM AMOUNT OF ENERGY?
+
+The command for this is "/1 showcap". This is a toggle-able command, so type it again to hide the max. Note that if you have the percentage symbol on, then it will always take precedence over the showcap, so you will have to disable the percentage in order to see the result.
+Showcap will automatically be disabled if you use the energy line as a normal title.
+
+
+--- HOW DO I CHECK FOR UPDATES?
+
+If you've been with us for a while, you'll notice that online update checks have been removed. This is because I can no longer support a server, and therefore the RP tool has been made local. While it is now Open Source, updates will only be delivered via the dedicated group for the RP Tool itself.
+You should have received an invitation to join it when you first attached your RP tool, but if not then you may find the link here: secondlife:///app/group/fbd3b4cb-8dca-6f36-679c-a3d0b44662a9/about
+
+
+--- DO I NEED THE HUD TO ENJOY THE RP TOOL?
+
+Nope! All functionality, save the module system, will be available to you even without the HUD. The whole RP tool can be controlled solely through the use of chat commands and macros if you want that. The HUD does come with built-in support for other Neckbeards Anonymous sim addons such as the weather system & LFRP.
+
+
+--- I DON'T WANT TO SHOW MY CHARACTER'S FULL NAME WHEN CHATTING. IS THIS POSSIBLE?
+
+Yes! It's very possible! Simply hit the button on page 2 of the HUD that says "Full Name/First Name" and it will toggle it on and off. Alternatively, use "/1 togglename" in the chat to do the same. This is a toggle-able setting.
+Please note that the titler chooses the first name based on space. This means that "Amanda Van Damme" will show as "Amanda" in the chat, but "Amanda'Van Damme" will show as "Amanda'Van".
+
+
+--- CAN I REDUCE CHATRANGE SOMEHOW?
+
+You can indeed! On page 2 of the HUD, hit the button that says "Chatrange 20m/10m". Alternatively, you can use "/1 togglewhisper" in the chat to do the same. This will toggle between a 10m chat range, & a 20m chat range when using the built-in chatter.
+This is a toggle-able setting, and it does not reset when you relog or detach the RP tool.
+
+
+--- I NEED A NEW COPY OF THE HELP FILE!
+
+If you're reading this, then you really don't! However, if for some reason this notecard should be too old and stale for your tastes, you can have a fresh one delivered straight from the proverbial oven by hitting the "?" button that's on the HUD, or typing "/1 help".
+
+
+--- HOW DO I BACKUP & RESTORE CHARACTER SAVES?
+
+On page 2 of the HUD, you'll find a BACKUP & RESTORE button. Click either one twice to respectively backup & restore character slots to and from a notecard.
+You can also do this in the chat by typing "/44 backup" and "/44 restore". Remember, you need to type this in twice within 10 seconds in order to initiate the backup or restoration.
+
+Important: Backing up to a notecard will output a chat message, the details of which you'll need to manually copy into a notecard and save for yourself.
+By default, when you restore, the restoration function looks for a card called "backup", but this can be changed. You can also specify the name of the card yourself, or even change the default name.
+
+/44 template cardname   ->  Sets the default card it'll always load from to "cardname".
+
+/44 restore ->  Loads the card defined as default as demonstrated above.
+
+/44 restore cardname    ->  overrules the default card choice, loading from a card of your own choosing.
+
+
+--- HOW DO I SAVE AND LOAD CHARACTERS?
+
+The NRPTP (Neckbeard RP Tool Pro) supports up to 12 saved character slots. To save a character, you either hit SAVE on the HUD, or type "/1 save" in the chat. This will open up a menu for you with slots onto which you may store your currently active character. Which character is stored where is listed in the description above the buttons.
+Same thing with load: "/1 load" or hitting the LOAD button on the HUD, will bring up a similar dialog menu from which you select a character to load into your titler.
+
+The save files will remember your percentage options, colour options & regeneration options -- as well as numerous other smaller tidbits, so you won't have to type them in again every time you load!
+
+
+--- CAN I CHANGE THE CHANNEL I USE TO EDIT THE TITLER?
+
+You can do that too, but note that you should have the HUD attached while you do it (if you use the HUD at all) because otherwise it won't be able to keep track of which channel you're using.
+To change the channel you send titler commands to, you just do "/1 changechannel x" where x is your desired channel.
+Keep in mind that channel 22, 3, 4 & 44 are reserved for the chatter and character handler & cannot be used. Any other challenge to replace channel 1, the default that we have been using now, is fair game.
+
+For instance, if you type "/1 changechannel 5" then your RP tool and HUD (if attached) will update to use channel 5 for commands. This means that if you want to change it back to channel 1 again, doing "/1 changechannel 1" isn't going to work; you'll need to do "/5 changechannel 1".
+This of course means that all other commands that previously used one channel, now uses the other. "/1 name Amanda" becomes "/5 name Amanda" and so on.
+
+
+--- HOW DO I MAKE MY CHARACTER TALK?
+
+The built-in chatter comes with a couple of neat commands to customize your chatting experience with!
+
+First of all, the chatting channels are: 3, 4, & 22.
+
+Channel 3 is the "NPC chat", which removes your character's name from the post. Useful if you're emoting a nearby NPC, or you just don't want to start your post with your name.
+
+Channel 4 will put your character name into the chat & emote it as if you were using "/me".
+
+Channel 22 is the default OOC channel, which is a cleaner & more good-looking alternative to brackets.
+
+For instance, "/22 This is OOC!" will generate the following chat: [06:52] Samantha A. Boss (Tenaar Feiri) OOC: This is OOC!
+Samantha A. Boss is in this case the character name, and your username is in paranthesis, with OOC at the end of the chatter name!
+
+Channel 3 & 4 also comes with additional commands that will be explained here. These commands are:
+
+/3! xyz -> Shouts "xyz" through the sim. This is intended to be used to announce spontaneous events.
+
+/4! xyz -> Shouts your emote across the map.
+
+/4 xyz -> Generates an emote. Ex.: "/4 prances around the map!", which becomes: "Amanda prances around the map!" in the chat, if your character's name is Amanda.
+
+/4# xyz -> Generates a whisper saying xyz. Ex.: "/4# Hello!" -> "Amanda whispers, "Hello!""
+
+/4: xyz -> Generates a say emote saying xyz. Ex.: "/4: Blah!" -> "Amanda says, "Blah!""
+
+
+
+
+##=>Functions
+
+All of the commands mentioned below assume that you're using channel 1. If you have changed your respective channel using the "changechannel" command, that is the channel you need to use.
+
+
+/1 title1-8 xyz -> Changes the specified title to xyz. Ex.: "/1 title1 Amanda"
+
+/1 titleconstant xyz -> Changes the title that is prefixed by the constant "titleconstant" to xyz. Ex.: "/1 name Amanda"
+
+/1 const1-8 xyz -> Changes the specified constant to xyz. Ex. "/1 const1 Name:"
+
+/1 comma -> Toggles between comma-separated top lines & linebreak separation.
+
+/1 changetitle -> Opens a dialog menu from which you can choose a title to edit & write it in a textbox. Remember to press Submit!
+
+/1 changeconstant -> Same as changetitle, only with constants instead.
+
+/1 color preset -> Changes text colour of the titler to preset. Ex.: "/1 color red"
+
+/1 color rgb -> Changes text colour of the titler to RGB value. Ex.: "/1 color 255 0 0"
+
+/1 postregen x y -> Activates energy regeneration per post. x = regen, y = maximum Ex.: "/1 postregen 5 100" --- Disables timed regen.
+
+/1 regen x y b -> Activates timed regen. x = regen, y = maximum, b = interval --- Disabled post regen.
+
+/1 update -> Queries the server to verify current NRPTP version. Will ask for update to be delivered if outdated.
+
+/1 togglename -> Toggles between using the full name or first name in chat.
+
+/1 togglewhisper -> Toggles between 10m & 20m chatrange.
+
+/1 ooc -> Toggles your OOC tag on. Optionally you can also append a message.
+
+/1 afk -> Same as OOC, but with an AFK tag instead.
+
+/1 back -> Puts you back IC again & shows your character information.
+
+/1 ic -> Does exactly the same as "/1 back".
+
+/1 changechannel x -> Changes which channel your titler listens to commands on (default: 1). x = your desired channel. Ex.: "/1 changechannel 5"
+
+/1 roll -> Rolls a D20 die & announces the result in local chat.
+
+/1 silentroll -> Same as /1 roll, except that it announces the result only to you.
+
+/1 help -> Gives you this notecard.
+
+/1 percent on -> Turns percent symbol on & appends it to title8.
+
+/1 percent off -> Opposite of percent on. Also allows "showcap" to display maximum energy.
+
+/1 showcap -> Toggles between showing energy as "100" or "100 / 100", where the right number is your maximum energy & the left number if your current. Percent on will override this setting. Enabled by default.
+
+/1 alpha x -> Changes the opacity of your titler text. x = any number between 0 & 100, OR either "hide" or "show". "hide" will make your titler text invisible, "show" will make it fully visible.
+
+
+
+####
+The following commands are chat commands:
+
+/3 xyz -> Chats while hiding the name. NPC chat, etc. Ex.: "/3 The table is round." -> "The table is round."
+
+/3! xyz -> Shouts "xyz" through the sim. This is intended to be used to announce spontaneous events.
+
+/4! xyz -> Shouts your emote across the map.
+
+/4 xyz -> Generates a normal emote. Ex.: "/4 prances around the map!", which becomes: "Amanda prances around the map!" in the chat, if your character's name is Amanda.
+
+/4# xyz -> Generates a whisper saying xyz. Ex.: "/4# Hello!" -> "Amanda whispers, "Hello!""
+
+/4: xyz -> Generates a say emote saying xyz. Ex.: "/4: Blah!" -> "Amanda says, "Blah!""
+
+/22 xyz -> Generates OOC chat. Ex.: "/22 This is OOC!" -> "[06:52] Samantha A. Boss (Tenaar Feiri) OOC: This is OOC!"
+
+
+
+####
+The following commands pertain to savefile backups!
+
+/44 template cardname   ->  Sets the default card it'll always load from to "cardname".
+
+/44 restore ->  Loads the card defined as default as demonstrated above.
+
+/44 restore cardname    ->  overrules the default card choice, loading from a card of your own choosing.
