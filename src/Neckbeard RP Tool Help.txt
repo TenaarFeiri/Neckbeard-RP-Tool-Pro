@@ -1,12 +1,3 @@
-Please be advised that this is closed alpha. There may be bugs and shortcomings prevalent throughout the tool.
-If you discover any weird behaviour, possible bugs & so on, please don't hesitate to report them to Tenaar Feiri (preferably by notecard; my IMs get capped).
-Please also feel free to provide any other feedback you may have to share!
-
-
-Please also note that there is no lite version of the HUD yet. It's coming, but probably closer to release.
-
-~~~~~~~~
-
 Written for version: r20001
 
 
