@@ -120,13 +120,21 @@ funcDoSpeak(string post)
 		{
 			llSetObjectName(charName);
 		}
+		if(post == " " || post == "")
+		{
+			jump failed;
+		}
         if(!whisper)
         {
-            llSay(0, "/me "+post);
+			
+			llSay(0, "/me "+post);
+			
         }
         else
         {
-            llWhisper(0,"/me "+ post);
+			
+			llWhisper(0,"/me "+ post);
+			
         }
 
     }
@@ -135,6 +143,10 @@ funcDoSpeak(string post)
         llSetObjectName(funcName()+",");
         post = llDeleteSubString(post, 0, 0);
         post = llStringTrim(post, STRING_TRIM);
+		if(post == " " || post == "")
+		{
+			jump failed;
+		}
         if(!whisper)
         {
             llSay(0, "/me "+post);
@@ -157,6 +169,7 @@ funcDoSpeak(string post)
         }
     }
     llMessageLinked(LINK_THIS, 1331, "regen", NULL_KEY);
+	@failed;
     llSetObjectName(savedName); // At the end of the chat, set object name back to default.
 
 }
