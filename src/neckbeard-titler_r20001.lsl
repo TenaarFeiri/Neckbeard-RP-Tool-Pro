@@ -172,7 +172,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 // ### Misc. Info Vars. ### //
 
-string version = "r20001"; // Our titler version.
+string version = "a20002"; // Our titler version.
 
 integer DEBUG = FALSE;
 
