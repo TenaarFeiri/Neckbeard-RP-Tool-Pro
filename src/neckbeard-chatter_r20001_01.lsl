@@ -93,18 +93,40 @@ funcDoSpeak(string post)
     }
     else if(llGetSubString(post, 0, 0) == "'")
     {
-        string tmpName = funcName();
-        //tmpName += llGetSubString(post, 0, 1);
-        post = llDeleteSubString(post, 0, 0);
-        post = llStringTrim(post, STRING_TRIM);
-        llSetObjectName(tmpName);
+        string charName = funcName();
+		if(llGetSubString(llToLower(post), 0, 1) == "'s" || llGetSubString(llToLower(post), 0, 0) == "'")
+		{
+			if(llToLower(llGetSubString(charName, -1, -1)) == "s")
+			{
+				llSetObjectName(charName+"'");
+				if(llGetSubString(post, 1, 1) == " " || llGetSubString(post, 1, 1) == "")
+				{
+					post = llStringTrim(llDeleteSubString(post, 0, 0), STRING_TRIM);
+				}
+				else
+				{
+					post = llStringTrim(llDeleteSubString(post, 0, 1), STRING_TRIM);
+				}
+
+			}
+			else
+			{
+				llSetObjectName(charName+"'s");
+				post = llStringTrim(llDeleteSubString(post, 0, 1), STRING_TRIM);
+
+			}
+		}
+		else
+		{
+			llSetObjectName(charName);
+		}
         if(!whisper)
         {
-            llSay(0, "/me'"+post);
+            llSay(0, "/me "+post);
         }
         else
         {
-            llWhisper(0,"/me'"+ post);
+            llWhisper(0,"/me "+ post);
         }
 
     }
