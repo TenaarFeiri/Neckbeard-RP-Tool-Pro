@@ -17,28 +17,6 @@ Redistribution and use in source and binary forms, with or without modification,
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-//    Planned features:
-//  - The complete Lismore RP Tool syntax, incl. all functionality! (except online save backups & some channels) [x] -- Implemented.
-//  - Full functionality incl. saving & loading characters even without HUD. [x] -- Implemented.
-//  - Better integration with web server's services. [-] -- Canceled.
-//  - Improved updating system. [-] -- Canceled.
-//  - Statistics logging to server. [-] -- Canceled.
-//  - Ability to reactively ban illegitimately distributed RP tools without disrupting scam victims' user experience. [-] -- Canceled.
-//  - Local LFRP service. [x] -- Implemented (in HUD).
-//  - Subscription-based global LFRP service via web server. [-] -- Canceled.
-//  - Integration with weather station & future RP systems. [x] -- Implemented (integrated in HUD).
-//  - Mutable char loading syntax. [x] -- Implemented.
-//  - Ability to backup saved characters locally. [x] -- Implemented.
-//  - Announcements system via server. [-] -- Canceled.
-//  - Ability to submit support tickets to server. [-] -- Canceled.
-//  - Ability to receive ticket answers from server to RP tool. [-] -- Canceled.
-//  - Offline mode! (i.e server features disabled) [x] -- Implemented.
-//  - Ability to change which channel you use for titler commands. [x] -- Implemented.
-//  - Original functionality w/ less variables. [x] -- Implemented.
-//  - Concatenation of code. [x] -- Implemented.
-//  - Ability to hide HUD. [o] -- In progress.
-//  - Style HUD as VISTA, multidirectional. [-] -- Canceled.
-//
 
 //   CHANGELOGS (tags: a (alpha/dev version); t (closed/public test); rc (release candidate); r (release).
 //
@@ -164,6 +142,9 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 //      - Changed the way hiding titles and such works to function with new backup and load feature.
 //      - Removed online mode in its entirety.
 //      - Allowed changing titles with multiword constants like this: /1 constant_name A title.
+//      
+//      ~ 20002
+//      - Updated version number.
 //
 
 
@@ -172,7 +153,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 // ### Misc. Info Vars. ### //
 
-string version = "a20002"; // Our titler version.
+string version = "r20002"; // Our titler version.
 
 integer DEBUG = FALSE;
 

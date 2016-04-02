@@ -1,7 +1,7 @@
 // Neckbeard Chatter
 // Handles chats.
 //
-// Last edit: March 30th, 2016 - Tenaar Feiri
+// Last edit: April 2nd, 2016 - Tenaar Feiri
 /*
 Copyright (c) 2016, Martin Øverby (Tenaar Feiri)
 All rights reserved.
