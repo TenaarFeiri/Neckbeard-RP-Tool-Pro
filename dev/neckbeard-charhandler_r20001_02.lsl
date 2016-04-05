@@ -33,6 +33,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
     
 */
 
+// a20001_02; attempt workaround for notecard line length limitations.
+
 
 
 // ### Variables ### //
@@ -54,10 +56,14 @@ string input; // Input string from backup.
 string constSep = "c~c"; // Constants separator.
 string titleSep = "t~t"; // Titles separator.
 string constTitleSep = "@|@"; // Separates constant list & titles list.
-integer dataConstant = FALSE; // FALSE when loading names from notecard, TRUE when loading vals.
+integer dataConstant = FALSE; // FALSE when loading names from notecard, TRUE when loading constants and values.
 integer posInList = 0; // Reset to 0 after loading from notecard.
 integer lastPos;
 integer pagination;
+
+
+list storedConst; // Used for loading from new format.
+list storedVals; // Used for loading from new format.
 
 
 // ### Functions ### //
@@ -114,6 +120,45 @@ string strReplace(string source, string pattern, string replace) {
     return source;
 }
 
+sayOutSaveString()
+{
+	// Loop nested within funcBackupRestore.
+	// Outs all title values in separate chats.
+	// Indicate constant value with [cv]
+	// Indicate title value with [tv]
+	// Indicate switch to next char slot with [ns]
+	
+	list const;
+	list vals;
+	integer x = 0;
+	integer z = 0;
+	integer y = 7;
+	integer numSlots = (llGetListLength(slots) - 1);
+	for(;x<=numSlots;x++)
+	{
+		const = llParseString2List(llList2String(llParseString2List(llList2String(slots, x), ["@|@"], []), 0), ["c~c"], []);
+		vals = llParseString2List(llList2String(llParseString2List(llList2String(slots, x), ["@|@"], []), 1), ["t~t"], []);
+		for(z=0;z<=y;z++)
+		{
+			// Loop to output constants.
+			llOwnerSay("[cv]" + llList2String(const, z));
+		}
+		y = (llGetListLength(vals) - 1);
+		for(z=0;z<=y;z++)
+		{
+			llOwnerSay("[tv]" + llList2String(vals, z));
+		}
+		if(x != numSlots)
+		{
+			llOwnerSay("[ns]");
+		}
+		//const += [];
+	}
+	llOwnerSay("===END===");
+	
+	
+}
+
 // Function to backup or restore data.
 funcBackupRestore(string cN)
 {
@@ -130,6 +175,10 @@ funcBackupRestore(string cN)
             data += "[name]"+llList2String(names, x)+"\n";
         }
         data += "<!>";
+		llOwnerSay("===BEGIN===");
+		llOwnerSay(data);
+		sayOutSaveString();
+		return;
         x = 0;
         y = (llGetListLength(slots) - 1);
         for(;x<=y;x++)
@@ -144,7 +193,7 @@ funcBackupRestore(string cN)
         llOwnerSay((string)getStringBytes(out)+" bytes.");
         connect = llHTTPRequest(server, [HTTP_BODY_MAXLENGTH, 16000, HTTP_METHOD, "POST", HTTP_MIMETYPE, "application/x-www-form-urlencoded"], out);
         llOwnerSay("Connecting to server..."); */
-        
+ 
         string out = "Copy everything between START and END (including chatter names) \n ===START=== \n";
         
 		// Because of Second Life's limitations to object chat bytelength (1024 bytes ASCII or 512 bytes UTF characters),
@@ -195,17 +244,21 @@ funcBackupRestore(string cN)
 funcParseLoadData(string data)
 {
     //llOwnerSay("Notecard output (pre-cut): " + data);
-    list tmp = llParseString2List(llList2String(slots, posInList), ["@|@"], []);
+    
+	llOwnerSay("PARSELOADDATA DEBUG, LINE " + (string)line + ": " + data);
     if(dataConstant)
-    {
+    {	// Begin legacy support for old notecard format.
+		list tmp = llParseString2List(llList2String(slots, posInList), ["@|@"], []);
         if(llGetSubString(data, 0, 6) == "[const]")
         {
+			dataConstant = 2; // When dataConstant = 2, lock to old format.
             data = llStringTrim(llDeleteSubString(data, 0, 6), STRING_TRIM);
             tmp = llListReplaceList(tmp, [(string)data, ""], 0, 1);
             input += llDumpList2String(tmp, constTitleSep);
         }
         else if(llGetSubString(data, 0, 6) == "[datas]")
         {
+			dataConstant = 2;
             data = llStringTrim(llDeleteSubString(data, 0, 6), STRING_TRIM);
             //input += data;
             if(posInList <= (llGetListLength(slots) - 1))
@@ -215,18 +268,99 @@ funcParseLoadData(string data)
                 posInList = (posInList + 1); // Advance list position.
                 input = "";
             }
-        }
+        } // End legacy support
+		else if(llGetSubString(data, 0, 3) == "[cv]" && dataConstant != 2)
+		{
+			data = llStringTrim(llDeleteSubString(data, 0, 3), STRING_TRIM);
+			storedConst += [(string)data];
+		}
+		else if(llGetSubString(data, 0, 3) == "[tv]" && dataConstant != 2)
+		{
+			data = llStringTrim(llDeleteSubString(data, 0, 3), STRING_TRIM);
+			storedVals += [(string)data];
+		}
+		else if(data == "[ns]")
+		{
+			storedConst += [(string)data];
+			storedVals += [(string)data];
+		}
     }
     else
     {
         if(posInList <= (llGetListLength(slots) - 1) && llGetSubString(data, 0, 5) == "[name]")
         {
+			//llOwnerSay("Received name: " + data);
             data = llStringTrim(llDeleteSubString(data, 0, 5), STRING_TRIM);
             names = llListReplaceList(names, [data], posInList, posInList);
             posInList = (posInList + 1); // Advance list position.
         }
     }
     //llOwnerSay("Notecard output (post-cut): " + data);
+}
+
+finalizeNotecardParse()
+{
+	// constSep
+	// titleSep
+	posInList = 0;
+	integer maxSlots = (llGetListLength(slots) - 1);
+	integer x = 0;
+	integer b = 0;
+	integer z = (llGetListLength(storedConst) - 1);
+	integer y = (llGetListLength(storedVals) - 1);
+	string tmp;
+	integer proceed = FALSE;
+	for(;x<=z;x++)
+	{
+		
+		if(proceed)
+		{
+			tmp += "@|@";
+			// Loop here to add to string.
+			for(;b<=z;b++)
+			{
+				if(llList2String(storedVals, b) != "[ns]")
+				{
+					tmp += llList2String(storedVals, b);
+					if(llList2String(storedVals, (b + 1)) != "[ns]")
+					{
+						tmp += titleSep;
+					}
+				}
+				else if(llList2String(storedVals, b) == "[ns]")
+				{
+					jump exitProceed;
+				}
+			}
+			@exitProceed;
+			// Once loop is broken, update slot list, then wipe data and carry on.
+			slots = llListReplaceList(slots, [(string)tmp], posInList, posInList);
+			if((posInList + 1) <= maxSlots)
+			{
+				posInList = (posInList + 1);
+			}
+			tmp = "";
+			proceed = FALSE;
+		}
+		else
+		{
+			if(llList2String(storedConst, x) == "[ns]")
+			{
+				proceed = TRUE;
+			}
+			else
+			{
+				tmp += llList2String(storedConst, x);
+				if(llList2String(storedConst, (x+1)) != "[ns]")
+				{
+					tmp += constSep;
+				}
+			}
+		}
+	}
+	
+	llOwnerSay("DEBUG MSG: NEW FORMAT LOOP COMPLETED");
+	
 }
 
 // Loads or saves data.
@@ -464,6 +598,7 @@ default
         {
             if(d == EOF)
             {
+				//finalizeNotecardParse();
                 llOwnerSay("Successfully restored backups.");
                 nc = NULL_KEY;
                 line = 0;
@@ -478,9 +613,11 @@ default
             {
                 if(d == "")
                 {
+					llOwnerSay("BREAK TRIGGERED!");
+					//return;
                     jump break;
                 }
-                if(d == "<!>")
+                if(!dataConstant && d == "<!>")
                 {
                     dataConstant = TRUE;
                     posInList = 0;
@@ -488,21 +625,10 @@ default
                     nc = llGetNotecardLine(cardname, line++);
                     return;
                 }
-                string restoringWhich;
-                if(dataConstant)
-                {
-                    if(lastPos != posInList)
-                    {
-                        restoringWhich = "Restoring character data: " + (string)(posInList + 1);
-                        lastPos = posInList;
-                    }
-                }
-                else
-                {
-                    restoringWhich = "Restoring name data: " + (string)(posInList + 1);
-                    lastPos = posInList;
-                }
-                //llOwnerSay(restoringWhich);
+				else
+				{
+					//llOwnerSay("DEBUG, LINE " + (string)line + ": " + d);
+				}
                 funcParseLoadData(d);
                 @break;
                 nc = llGetNotecardLine(cardname, line++);
