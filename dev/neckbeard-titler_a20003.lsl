@@ -46,13 +46,14 @@ integer changeTitle; // To keep track of the channel we use for changing titles.
 integer changeTitleHandler; // Handler for the changeTitle channel.
 integer changeIt; // FALSE when selecting title/constant, TRUE when changing it.
 string selected; // Set when choosing a title/constant to change.
+integer isComma = 0; // 0 = line separation; 1 = comma separation; 2 = merge line 1 & 2 without comma.)
 
 // ### Titler data ### //
 
 //vector color = <1,1,1>; // Colour for the titler text. Default is white.
 float alpha = 1.0; // Titler visibility.
 list constants = ["Name:","Species:","Mood:","Status:","Body:","Scent:","Currently:","Energy:"]; // List for our constants.
-list titles = ["My name","My species","My mood","My status","My body","my scent","my current action","100","on", "0", "100", "255,255,255", "0"]; // List for our titles!
+list titles = ["My name","My species","My mood","My status","My body","my scent","my current action","100","on", "0", "100", "255,255,255"]; // List for our titles!
 
 /*
 
@@ -68,7 +69,6 @@ list titles = ["My name","My species","My mood","My status","My body","my scent"
         
         11 -> Text colour.
 		
-		12 -> Comma (0 = line separation; 1 = comma separation; 2 = merge line 1 & 2 without comma.)
 
 */
 
@@ -277,7 +277,6 @@ funcParseTitle() // Parse the title.
 {
     string tmp; // Temporary string.
     string nameVal = llList2String(titles, 0);
-	integer isComma = llList2Integer(titles, 12);
     if(nameVal == "null")
     {
         nameVal = "";
@@ -888,18 +887,18 @@ default
                     // Toggle comma parsing!
                     else if(llToLower(m) == "comma")
                     {
-						integer isComma = llList2Integer(titles, 12);
+						
                         if(!isComma)
                         {
-                            titles = llListReplaceList(titles, ["1"], 12, 12);
+                            isComma = 1;
                         }
 						else if(isComma = 1)
 						{
-							titles = llListReplaceList(titles, ["2"], 12, 12);
+							isComma = 2;
 						}
                         else
                         {
-                            titles = llListReplaceList(titles, ["0"], 12, 12);
+                            isComma = 0;
                         }
                         funcParseTitle();
                     }
