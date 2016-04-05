@@ -18,142 +18,11 @@ Redistribution and use in source and binary forms, with or without modification,
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-//   CHANGELOGS (tags: a (alpha/dev version); t (closed/public test); rc (release candidate); r (release).
-//
-//  ~~ v0.1
-//  - Finished the title parsing to llSetText();
-//  - Started work on actual title parsing.
-//  - Finished working on title & constant parsing.
-//  - Added colour changing. No colour presets. That memory is best used for other things.
-//
-//
-//  ~~ v0.2
-//
-//  - Added chatter functionality. No use of function for them this time to save memory.
-//  - Added whisper functionality for toggleable whisper mode.
-//  - Added OOC channel 22. Can also OOC with double paranthesis in /4.
-//  - Added NPC chat on /3.
-//  - Added in a check to look for doubly typed in channel numbers on /4 & /3.
-//  - Started work on postregen functionality.
-//  - Finished postregen functionality. Works flawlessly with the titler.
-//  - Added support for network API.
-//
-//
-//
-//  ~~ v0.3
-//
-//  - Started working on support for saved files.
-//  - Added support for loading & saving characters. (untested)
-//    - Tested loading and saving characters, fixed errors.
-//    - Loading and saving now works!
-//    - Added OOC and AFK functionality.
-//    - Fixed issue with AFK & OOC messages not alternating properly.
-//
-//
-//
-//    ~~ v0.4
-//
-//    - Added D20 roll, both public and private.
-//    - Finished the character backup & restore functionality.
-//    - Upgraded the character loading to properly remember %, and to remember post regen rates.
-//
-//
-//
-//        ~~ v0.5
-//
-//        - Added the togglename function.
-//        - Made the list of character slots return values in proper order.
-//        - Made colour remembered.
-//
-//
-//        ~~ v0.6
-//
-//        - Added show-hide functions to the tool...
-//        - Added a help command for the help notecard.
-//        - Fixed some minor bugs with the energy parsing.
-//        - Stabilized the titler parsing some more.
-//        - Touched up OOC/AFK parsing a little.
-//
-//
-//        ~~ v0.7
-//        - Started work on optimizing the RP tool a bit more to reduce memory usage.
-//        - Added timer regen to the RP tool.
-//        - Decided to ditch the updating system in favour of more traditional unpacking.
-//        - Made sure timed regen and post regen does not interfere with one another.
-//
-//
-//      ~~ v0.8
-//      - Moved all chatter functions to a separate script.
-//      - Cleaned up the code a little.
-//      - Fixed some minor errors with the character loading process.
-//      - Fixed comma parsing in the titler.
-//
-//      ~~ v0.9
-//      - Added colour commands now that we have freed up memory.
-//      - Added colour presents since enough memory was made available to justify it!
-//      - Concatenated colour command. It now recognizes valid vectors or colour presets. /1 color 255 0 0 yields the same
-//        result now as /1 color red.
-//      
-//      ~~ v0.10
-//      - Improved dice rolling.
-//      - Added ability to change titles and constants settings via dialog menu.
-//      - Completely revised several aspects of the title parsing
-//
-//      ~~ v0.11
-//      - Addressed issue that causes loading errors after new titler vars are added.
-//
-//      ~~ v0.12
-//      - Addressed title parsing issue when hiding titles.
-//      - Added ability to display max energy when not using percentage.
-//      - Added alpha changing abilities.
-//
-//      ~~ v0.13
-//      - Changed the way showing percentage works.
-//
-//      ~~ v0.14
-//      - Added support for HUD.
-//      - Fixed changechannel command.
-//      - Added support for using title8 as a normal title.
-//
-//      ~~ v0.15 -> v0.17
-//      - Fixed numerous minor bugs.
-//      - Fixed a bug preventing changetitle & changeconstant from working properly if accidentally ignored.
-//      - Set showcap to TRUE by default.
-//      - Added output for when titles are changed while OOC/AFK.
-//      - Added a DEBUG var.
-//      - Fixed bug where changing the name through /1 changetitle didn't reflect the change in the chatter.
-//
-//      ~~ 0.21
-//      - Fixed constant & title hiding.
-//
-//      ~~ 0.22
-//      - Implemented new RNG for dice rolling, making it competitive with Firestorm's dice roller command.
-//      - Dice rolls can now be customized. Currently only able to input # of sides, more to come.
-//
-//      ~~ 0.23
-//      - Fixed the HUD so it doesn't trigger or be triggered by other people's backup and restore requests.
-//
-//      ~ 0.24
-//      - Fixed the changetitle command, which dropped the last letter out of the name when chatting for some reason.
-//      - Minor changes to improve memory usage and performance.
-//      - Moved to release version numbering.
-//
-//      ~ 20001
-//      - Changed the way hiding titles and such works to function with new backup and load feature.
-//      - Removed online mode in its entirety.
-//      - Allowed changing titles with multiword constants like this: /1 constant_name A title.
-//      
-//      ~ 20002
-//      - Updated version number.
-//
-
-
-
 // Global variables listed by category. //
 
 // ### Misc. Info Vars. ### //
 
-string version = "r20002"; // Our titler version.
+string version = "a20003"; // Our titler version.
 
 integer DEBUG = FALSE;
 
@@ -702,7 +571,7 @@ default
         funcParseTitle();
         llOwnerSay((string)llGetUsedMemory()+" bytes used.");
         llMessageLinked(LINK_THIS, 1337, llList2String(titles, 0), ""); // Informs chatter of name.
-        llOwnerSay("If you haven't already, please consider joining our group here as this is where you'll receive updates and support from: secondlife:///app/group/fbd3b4cb-8dca-6f36-679c-a3d0b44662a9/about");
+        llOwnerSay("If you haven't already, please consider joining our group here as this is where you'll receive updates and support from: secondlife:///app/group/fbd3b4cb-8dca-6f36-679c-a3d0b44662a9/about \nGitHub link: https://github.com/TenaarFeiri/Neckbeard-RP-Tool-Pro");
     }
 
     // Handles incoming link messages.
