@@ -51,9 +51,8 @@ string selected; // Set when choosing a title/constant to change.
 
 //vector color = <1,1,1>; // Colour for the titler text. Default is white.
 float alpha = 1.0; // Titler visibility.
-integer comma; // FALSE by default. Decides whether to separate by comma or linebreak.
 list constants = ["Name:","Species:","Mood:","Status:","Body:","Scent:","Currently:","Energy:"]; // List for our constants.
-list titles = ["My name","My species","My mood","My status","My body","my scent","my current action","100","on", "0", "100", "255,255,255"]; // List for our titles!
+list titles = ["My name","My species","My mood","My status","My body","my scent","my current action","100","on", "0", "100", "255,255,255", "0"]; // List for our titles!
 
 /*
 
@@ -68,6 +67,8 @@ list titles = ["My name","My species","My mood","My status","My body","my scent"
         10 -> Maximum energy (used w/ postregen)
         
         11 -> Text colour.
+		
+		12 -> Comma (0 = line separation; 1 = comma separation; 2 = merge line 1 & 2 without comma.)
 
 */
 
@@ -276,6 +277,7 @@ funcParseTitle() // Parse the title.
 {
     string tmp; // Temporary string.
     string nameVal = llList2String(titles, 0);
+	integer isComma = llList2Integer(titles, 12);
     if(nameVal == "null")
     {
         nameVal = "";
@@ -312,10 +314,14 @@ funcParseTitle() // Parse the title.
             tmp = tmp + constVal + " " + titleVal; // Add the title to the temporary string.
             if(x != i) // If x is not the last entry in the list...
             {
-                if(x == 0 && comma) // Check to see if x is exactly 0 and that comma is true.
+                if(x == 0 && isComma == 1) // Check to see if x is exactly 0 and that comma is true.
                 {
                     tmp = tmp + ", "; // If comma is true, separate the two top titles by a comma instead of a linebreak.
                 }
+				else if(x == 0 && isComma == 2)
+				{
+					tmp = tmp + " ";
+				}
                 else // If this is not the case...
                 {
                     tmp = tmp + "\n"; // Then we separate by way of linebreak.
@@ -882,13 +888,18 @@ default
                     // Toggle comma parsing!
                     else if(llToLower(m) == "comma")
                     {
-                        if(!comma)
+						integer isComma = llList2Integer(titles, 12);
+                        if(!isComma)
                         {
-                            comma = TRUE;
+                            titles = llListReplaceList(titles, ["1"], 12, 12);
                         }
+						else if(isComma = 1)
+						{
+							titles = llListReplaceList(titles, ["2"], 12, 12);
+						}
                         else
                         {
-                            comma = FALSE;
+                            titles = llListReplaceList(titles, ["0"], 12, 12);
                         }
                         funcParseTitle();
                     }
