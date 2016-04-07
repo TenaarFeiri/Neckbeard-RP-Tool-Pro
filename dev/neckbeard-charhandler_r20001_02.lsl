@@ -46,7 +46,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 // ### Variables ### //
 
 list names = ["empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty","empty"]; // Used for recalling char names.
-list slots = ["null@|@null","null@|@null","null@|@null","null@|@null","null@|@null","null@|@null","null@|@null","null@|@null","null@|@null","null@|@null","null@|@null","null@|@null"];
+list slots = ["nil","nil","nil","nil","nil","nil","nil","nil","nil","nil","nil","nil"];
 
 integer backup = 0; // 1 = backup, 2 = restore.
 integer isBusy = FALSE;
@@ -195,37 +195,6 @@ funcBackupRestore(string cN)
         llOwnerSay("===BEGIN===");
         llOwnerSay(data);
         sayOutSaveString();
-        return;
-        x = 0;
-        y = (llGetListLength(slots) - 1);
-        for(;x<=y;x++)
-        {
-            data += "\n";
-            string constants = "[const]" + llList2String(llParseString2List(llList2String(slots, x), ["@|@"], []), 0);
-            string vals = "[datas]" + llList2String(llParseString2List(llList2String(slots, x), ["@|@"], []), 1);
-            data += constants + "\n" + vals + "@@@";
-        }
-        /* data = strReplace(data, "%", "[perc]");
-        string out = "do=2&uuid="+(string)owner+"&username="+llKey2Name(owner)+"&data="+llEscapeURL(data);
-        llOwnerSay((string)getStringBytes(out)+" bytes.");
-        connect = llHTTPRequest(server, [HTTP_BODY_MAXLENGTH, 16000, HTTP_METHOD, "POST", HTTP_MIMETYPE, "application/x-www-form-urlencoded"], out);
-        llOwnerSay("Connecting to server..."); */
- 
-        string out = "Copy everything between START and END (including chatter names) \n ===START=== \n";
-        
-        // Because of Second Life's limitations to object chat bytelength (1024 bytes ASCII or 512 bytes UTF characters),
-        // this has to be done in a very heavy-handed way.
-        llOwnerSay(out);
-        llOwnerSay("\n" + llList2String(llParseString2List(data, ["<!>"], []), 0) + "<!>");
-        list temp = llParseString2List(llList2String(llParseString2List(data, ["<!>"], []), 1), ["@@@"], []);
-        x = 0;
-        y = (llGetListLength(temp) - 1);
-        for(;x<=y;x++)
-        {
-            llOwnerSay("\n" + llList2String(temp, x));
-        }
-        llOwnerSay("===END===");
-        
         
     }
     // Otherwise, we're restoring.
@@ -318,7 +287,7 @@ funcParseLoadData(string data)
             if((llGetListLength(storedNames) - 1) < 12)
             {
                 storedNames += [data];
-                llOwnerSay("Stored names: " + llList2CSV(storedNames));
+                //llOwnerSay("Stored names: " + llList2CSV(storedNames));
             }
         }
     }
@@ -352,7 +321,7 @@ list storedValues(integer valsInt, integer valsLength, integer separateValsVal)
         }
     }
     
-    return ["null"];
+    return [];
 }
 
 finalizeNotecardParse()
@@ -371,13 +340,19 @@ finalizeNotecardParse()
     string slotDataString;
     // Update name list.
     names = llListReplaceList(names, storedNames, 0, (llGetListLength(storedNames) - 1));
-    llOwnerSay("Listed names: " + llList2CSV(names));
-    
+    //llOwnerSay("Listed names: " + llList2CSV(names));
+    if(dataConstant == 2)
+    {
+        // Upon completion of the nested loop, clear storedX values.
+        storedConst = [];
+        storedNames = [];
+        storedVals = [];
+        return;
+    }
     
     list outConst;
     list outVals;
     list temp;
-    string out;
     integer x = 0;
     integer makeSep = 0;
     for(x=0;x<=constLength;x++)
@@ -387,15 +362,15 @@ finalizeNotecardParse()
         {
             if(makeSep != 0)
             {
-                out += constSep;
+                slotDataString += constSep;
             }
-            out += ln;
+            slotDataString += ln;
             makeSep = 1;
         }
         else
         {
-            outConst += [out];
-            out = "";
+            outConst += [(string)slotDataString];
+            slotDataString = "";
             makeSep = 0;
         }
     }
@@ -407,24 +382,33 @@ finalizeNotecardParse()
         {
             if(makeSep != 0)
             {
-                out += titleSep;
+                slotDataString += titleSep;
             }
-            out += ln;
+            slotDataString += ln;
+            //llOwnerSay("Out progress: " + out);
+            llOwnerSay(ln);
             makeSep = 1;
         }
         else
         {
-            outVals += [out];
-            out = "";
+            outVals += [(string)slotDataString];
+            slotDataString = "";
             makeSep = 0;
         }
     }
     x = 0;
     integer y = (llGetListLength(outConst) - 1);
+    slotDataString = "";
     for(x=0;x<=y;x++)
     {
-        out = llList2String(outConst, x) + constTitleSep + llList2String(outVals, x);
-        temp += [(string)out];
+        slotDataString = llList2String(outConst, x) + constTitleSep + llList2String(outVals, x);
+        if(~llSubStringIndex(slotDataString, "@|@nil"))
+        {
+            // Temporary workaround for nilName bug.
+            integer inx = (llSubStringIndex(slotDataString, "@|@nil") + 3);
+            slotDataString = llDeleteSubString(slotDataString, inx, (inx + 2));
+        }
+        temp += [(string)slotDataString];
     }
     
     // Upon completion of the nested loop, clear storedX values.
@@ -436,73 +420,21 @@ finalizeNotecardParse()
     if(llGetListLength(temp) < 13)
     {
             //slots = llListReplaceList(slots, temp, 0, -1);
-            slots = temp;
-            llOwnerSay("DEBUG MSG: NEW FORMAT LOOP COMPLETED");
-    }
-    else
-    {
-            llOwnerSay("DEBUG MSG: NEW FORMAT LOOP FAILED");
-    }
-    
-    return;
-    
-    // Then parse data.
-    
-    for( ; constInt <= constLength ; constInt++)
-    {
-            // Utilize nested loops to parse data.
-            // First we parse the constants, until [ns] shows up and tells us to switch to values.
-            if(llList2String(storedConst, constInt) != "[ns]")
+            //slots = llList2List(temp, 0, -1);
+            y = (llGetListLength(temp) - 1);
+            if(y > 11)
             {
-                if(constInt != separateConstVal)
-                {
-                    // We want to add the separator first, but only if we've already added the first constant to string.
-                    slotDataString += constSep;
-                }
-                // Add data to string.
-                slotDataString += llList2String(storedConst, constInt);
-                //llOwnerSay("parsing const:" + slotDataString);
-            }
-            else
-            {
-                // If we do encounter [ns] here, parse titles, and add to outVals.
-                // First we add the category separator to the string.
-                slotDataString += constTitleSep;
-                list in = storedValues(constInt, valsLength, separateConstVal);
-                if(llList2String(in, 0) == "null")
-                {
-                    llOwnerSay("Aborting; List value = null.");
-                    return;
-                }
-                // Then note down the separateConstVal.
-                separateConstVal = llList2Integer(in, 1);
-                constInt = llList2Integer(in, 0);
-                slotDataString += llList2String(in, 2);
-                llOwnerSay(slotDataString);
+                llOwnerSay("Can't load; Too many save slots in file.");
                 return;
-                outVals += [slotDataString];
-                
-
             }
-    }
-    
-    // Upon completion of the nested loop, clear storedX values.
-    storedConst = [];
-    storedNames = [];
-    storedVals = [];
-    
-    // Then parse data into save slots, replacing them all.
-    if(llGetListLength(outVals) < 13)
-    {
-            slots = llListReplaceList(slots, outVals, 0, -1);
-            llOwnerSay("OutVals: " + llList2CSV(outVals));
-            llOwnerSay("Slots: " + llList2CSV(slots));
+            
+            slots = llListReplaceList(slots, temp, 0, y);
             llOwnerSay("DEBUG MSG: NEW FORMAT LOOP COMPLETED");
     }
     else
     {
             llOwnerSay("DEBUG MSG: NEW FORMAT LOOP FAILED");
-        }
+    }
     
 }
 
@@ -561,7 +493,7 @@ funcLoadSaveData(string data)
             {
                 llOwnerSay("Save fail.");
                 names = llListReplaceList(names, ["empty"], (integer)slot, (integer)slot);
-                slots = llListReplaceList(slots, ["null@|@null"], (integer)slot, (integer)slot);
+                slots = llListReplaceList(slots, [""], (integer)slot, (integer)slot);
 
 
                 return;
@@ -741,7 +673,9 @@ default
         {
             if(d == EOF)
             {
-        finalizeNotecardParse();
+                llOwnerSay(llList2CSV(storedVals));
+                //return;
+                finalizeNotecardParse();
                 llOwnerSay("Successfully restored backups.");
                 nc = NULL_KEY;
                 line = 0;
@@ -750,13 +684,13 @@ default
                 posInList = 0;
                 isBusy = FALSE;
                 cardname = defCardName;
-                //llOwnerSay(llDumpList2String(slots, "\n"));
+                llOwnerSay(llDumpList2String(slots, "\n"));
             }
             else
             {
                 if(d == "")
                 {
-                    llOwnerSay("BREAK TRIGGERED!");
+                    //llOwnerSay("BREAK TRIGGERED!");
                     //return;
                     jump break;
                 }

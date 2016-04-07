@@ -277,7 +277,7 @@ funcParseTitle() // Parse the title.
 {
     string tmp; // Temporary string.
     string nameVal = llList2String(titles, 0);
-    if(nameVal == "null")
+    if(nameVal == "nil")
     {
         nameVal = "";
     }
@@ -298,15 +298,15 @@ funcParseTitle() // Parse the title.
         {
             string constVal = llList2String(constants, x);
             string titleVal = llList2String(titles, x);
-            if(constVal == "null" && titleVal == "null")
+            if(constVal == "nil" && titleVal == "nil")
             {
                 jump break;
             }
-            else if(constVal == "null")
+            else if(constVal == "nil")
             {
                 constVal = "";
             }
-            else if(titleVal == "null")
+            else if(titleVal == "nil")
             {
                 titleVal = "";
             }
@@ -317,10 +317,10 @@ funcParseTitle() // Parse the title.
                 {
                     tmp = tmp + ", "; // If comma is true, separate the two top titles by a comma instead of a linebreak.
                 }
-				else if(x == 0 && isComma == 2)
-				{
-					tmp = tmp + " ";
-				}
+                else if(x == 0 && isComma == 2)
+                {
+                        tmp = tmp + " ";
+                }
                 else // If this is not the case...
                 {
                     tmp = tmp + "\n"; // Then we separate by way of linebreak.
@@ -329,7 +329,7 @@ funcParseTitle() // Parse the title.
             @break;
         }
         // Then when the loop is over, add the percentage...if it exists.
-        if(llList2String(titles, 7) != "null") // If energy is hidden, or is not integer, do not add %.
+        if(llList2String(titles, 7) != "nil") // If energy is hidden, or is not integer, do not add %.
         {
             if(IsInteger(llList2String(titles, 7)))
             {
@@ -435,7 +435,7 @@ integer strIsDecimal(string str)
 // Function for handling post regens!
 funcPostRegen()
 {
-    if(llList2String(titles, 7) == "null" || !IsInteger(llList2String(titles, 7))) // Do not update the energy if it's hidden, or is not an integer.
+    if(llList2String(titles, 7) == "nil" || !IsInteger(llList2String(titles, 7))) // Do not update the energy if it's hidden, or is not an integer.
     {
         return;
     }
@@ -709,7 +709,7 @@ default
                         m = llStringTrim(m, STRING_TRIM); // Trim the string for leading and trailing spaces.
                         if(llToLower(m) == "hide" || llToLower(m) == "none")
                         {
-                            m = "null";
+                            m = "nil";
                         }
                         
         
@@ -729,7 +729,7 @@ default
                         m = llStringTrim(m, STRING_TRIM); // Trim the string for leading and trailing spaces.
                         if(llToLower(m) == "hide" || llToLower(m) == "none")
                         {
-                            m = "null";
+                            m = "nil";
                         }
                         funcUpdTitle(TRUE, tmp, m); // Then update the constant!
                     } // End update.
