@@ -64,6 +64,7 @@ integer pagination;
 
 list storedConst; // Used for loading from new format.
 list storedVals; // Used for loading from new format.
+list storedNames; // Used for storing character names.
 
 
 // ### Functions ### //
@@ -251,14 +252,20 @@ funcParseLoadData(string data)
 		list tmp = llParseString2List(llList2String(slots, posInList), ["@|@"], []);
         if(llGetSubString(data, 0, 6) == "[const]")
         {
-			dataConstant = 2; // When dataConstant = 2, lock to old format.
+            if(dataConstant != 2)
+            {
+                dataConstant = 2; // When dataConstant = 2, lock to old format.
+            }
             data = llStringTrim(llDeleteSubString(data, 0, 6), STRING_TRIM);
             tmp = llListReplaceList(tmp, [(string)data, ""], 0, 1);
             input += llDumpList2String(tmp, constTitleSep);
         }
         else if(llGetSubString(data, 0, 6) == "[datas]")
         {
-			dataConstant = 2;
+            if(dataConstant != 2)
+            {
+                dataConstant = 2;
+            }
             data = llStringTrim(llDeleteSubString(data, 0, 6), STRING_TRIM);
             //input += data;
             if(posInList <= (llGetListLength(slots) - 1))
@@ -269,21 +276,21 @@ funcParseLoadData(string data)
                 input = "";
             }
         } // End legacy support
-		else if(llGetSubString(data, 0, 3) == "[cv]" && dataConstant != 2)
-		{
-			data = llStringTrim(llDeleteSubString(data, 0, 3), STRING_TRIM);
-			storedConst += [(string)data];
-		}
-		else if(llGetSubString(data, 0, 3) == "[tv]" && dataConstant != 2)
-		{
-			data = llStringTrim(llDeleteSubString(data, 0, 3), STRING_TRIM);
-			storedVals += [(string)data];
-		}
-		else if(data == "[ns]")
-		{
-			storedConst += [(string)data];
-			storedVals += [(string)data];
-		}
+        else if(llGetSubString(data, 0, 3) == "[cv]" && dataConstant != 2)
+        {
+                data = llStringTrim(llDeleteSubString(data, 0, 3), STRING_TRIM);
+                storedConst += [(string)data];
+        }
+        else if(llGetSubString(data, 0, 3) == "[tv]" && dataConstant != 2)
+        {
+                data = llStringTrim(llDeleteSubString(data, 0, 3), STRING_TRIM);
+                storedVals += [(string)data];
+        }
+        else if(data == "[ns]")
+        {
+                storedConst += [(string)data];
+                storedVals += [(string)data];
+        }
     }
     else
     {
@@ -291,8 +298,11 @@ funcParseLoadData(string data)
         {
 			//llOwnerSay("Received name: " + data);
             data = llStringTrim(llDeleteSubString(data, 0, 5), STRING_TRIM);
-            names = llListReplaceList(names, [data], posInList, posInList);
-            posInList = (posInList + 1); // Advance list position.
+            //names = llListReplaceList(names, [data], posInList, posInList);
+            if((llGetListLength(storedNames) - 1) < 12)
+            {
+                storedNames += [data];
+            }
         }
     }
     //llOwnerSay("Notecard output (post-cut): " + data);
@@ -302,64 +312,88 @@ finalizeNotecardParse()
 {
 	// constSep
 	// titleSep
-	posInList = 0;
-	integer maxSlots = (llGetListLength(slots) - 1);
-	integer x = 0;
-	integer b = 0;
-	integer z = (llGetListLength(storedConst) - 1);
-	integer y = (llGetListLength(storedVals) - 1);
-	string tmp;
-	integer proceed = FALSE;
-	for(;x<=z;x++)
+	integer slotsLength = (llGetListLength(slots) - 1);
+	integer constLength = (llGetListLength(storedConst) - 1);
+	integer valsLength = (llGetListLength(storedVals) - 1);
+	integer slotPosition = 0;
+	integer constInt = 0;
+	integer valsInt = 0;
+	integer separateConstVal = 0;
+	integer separateValsVal = 0;
+	list outVals;
+	string slotDataString;
+	// Update name list.
+	names = llListReplaceList(names, storedNames, 0, (llGetListLength(storedNames) - 1));
+	
+	// Then parse data.
+	
+	for( ; constInt <= constLength ; constInt++)
 	{
-		
-		if(proceed)
-		{
-			tmp += "@|@";
-			// Loop here to add to string.
-			for(;b<=z;b++)
-			{
-				if(llList2String(storedVals, b) != "[ns]")
-				{
-					tmp += llList2String(storedVals, b);
-					if(llList2String(storedVals, (b + 1)) != "[ns]")
-					{
-						tmp += titleSep;
-					}
-				}
-				else if(llList2String(storedVals, b) == "[ns]")
-				{
-					jump exitProceed;
-				}
-			}
-			@exitProceed;
-			// Once loop is broken, update slot list, then wipe data and carry on.
-			slots = llListReplaceList(slots, [(string)tmp], posInList, posInList);
-			if((posInList + 1) <= maxSlots)
-			{
-				posInList = (posInList + 1);
-			}
-			tmp = "";
-			proceed = FALSE;
-		}
-		else
-		{
-			if(llList2String(storedConst, x) == "[ns]")
-			{
-				proceed = TRUE;
-			}
-			else
-			{
-				tmp += llList2String(storedConst, x);
-				if(llList2String(storedConst, (x+1)) != "[ns]")
-				{
-					tmp += constSep;
-				}
-			}
-		}
+            // Utilize nested loops to parse data.
+            // First we parse the constants, until [ns] shows up and tells us to switch to values.
+            if(llList2String(storedConst, constInt) != "[ns]")
+            {
+                if(constInt != separateConstVal)
+                {
+                    // We want to add the separator first, but only if we've already added the first constant to string.
+                    slotDataString += constSep;
+                }
+                // Add data to string.
+                slotDataString += llList2String(storedConst, constInt);
+            }
+            else
+            {
+                // If we do encounter [ns] here, parse titles, and add to outVals.
+                // First we add the category separator to the string.
+                slotDataString += constTitleSep;
+                
+                // Then note down the separateConstVal.
+                separateConstVal = (constInt + 1);
+                
+                // Then begin loop.
+                for( ; valsInt <= valsLength ; valsInt++)
+                {
+                    if(llList2String(storedVals, valsInt) != "[ns]")
+                    {
+                        // Same deal as with constants.
+                        if(valsInt != separateValsVal)
+                        {
+                            slotDataString += titleSep;
+                        }
+                        
+                        slotDataString += llList2String(storedVals, valsInt);
+                    }
+                    else
+                    {
+                        // Once we reach [ns], progress separateValsVal.
+                        separateValsVal = ( valsInt + 1 );
+                        
+                        // Then process to list and clear string.
+                        if(llGetListLength(outVals) < 13)
+                        {
+                            outVals += [slotDataString];
+                        }
+                        slotDataString = "";
+                    }
+                }
+            }
 	}
 	
-	llOwnerSay("DEBUG MSG: NEW FORMAT LOOP COMPLETED");
+	// Upon completion of the nested loop, clear storedX values.
+	storedConst = [];
+	storedNames = [];
+	storedVals = [];
+	
+	// Then parse data into save slots, replacing them all.
+	if(llGetListLength(outVals) < 13)
+	{
+            slots = outVals;
+            llOwnerSay("DEBUG MSG: NEW FORMAT LOOP COMPLETED");
+	}
+	else
+	{
+            llOwnerSay("DEBUG MSG: NEW FORMAT LOOP FAILED");
+        }
 	
 }
 
