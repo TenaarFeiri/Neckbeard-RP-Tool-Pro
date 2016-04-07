@@ -2,7 +2,7 @@
 // Rewritten from scratch.
 
 
-// NOTE: INVESTIGATE TITLER TO SEE OF nullNAME ARISES FROM THERE.
+// NOTE: Investigate error further later; For now the bandaid fix will do.
 
 
 
@@ -20,24 +20,7 @@ Redistribution and use in source and binary forms, with or without modification,
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-/*
-// ### CHANGELOGS ### \\
 
-    # 0.7
-        - Upgraded character server backups to prevent data loss from misplaced %s in the titles.
-        - Started fixing notecard backups.
-    
-    # 0.8
-        - Added 3 more character slots to savefile.
-    
-    #0.9
-        - Fixed stack-heap error.
-    
-    # 0.11
-        - Implemented offline backups and restorations.
-        - Severed connection to server entirely.
-    
-*/
 
 // a20001_02; attempt workaround for notecard line length limitations.
 
@@ -242,6 +225,14 @@ funcParseLoadData(string data)
                 dataConstant = 2; // When dataConstant = 2, lock to old format.
             }
             data = llStringTrim(llDeleteSubString(data, 0, 6), STRING_TRIM);
+            if(data == "null"+constTitleSep+"null")
+            {
+                data = "nil"+constTitleSep+"nil";
+            }
+            else if(data == "null")
+            {
+                data = "nil";
+            }
             tmp = llListReplaceList(tmp, [(string)data, ""], 0, 1);
             input += llDumpList2String(tmp, constTitleSep);
         }
@@ -252,6 +243,14 @@ funcParseLoadData(string data)
                 dataConstant = 2;
             }
             data = llStringTrim(llDeleteSubString(data, 0, 6), STRING_TRIM);
+            if(data == "null"+constTitleSep+"null")
+            {
+                data = "nil"+constTitleSep+"nil";
+            }
+            else if(data == "null")
+            {
+                data = "nil";
+            }
             //input += data;
             if(posInList <= (llGetListLength(slots) - 1))
             {
@@ -292,36 +291,6 @@ funcParseLoadData(string data)
         }
     }
     //llOwnerSay("Notecard output (post-cut): " + data);
-}
-
-list storedValues(integer valsInt, integer valsLength, integer separateValsVal)
-{
-    string slotDataString;
-    for( ; valsInt <= valsLength ; valsInt++)
-    {
-        if(llList2String(storedVals, valsInt) != "[ns]")
-        {
-            // Same deal as with constants.
-            if(valsInt != separateValsVal)
-            {
-                slotDataString += titleSep;
-            }
-            
-            slotDataString += llList2String(storedVals, valsInt);
-            //llOwnerSay("parsing vals:" + slotDataString);
-        }
-        else
-        {
-            // Once we reach [ns], progress separateValsVal.
-            separateValsVal = ( valsInt + 1 );
-            
-            // Then process to list and clear string.
-            return [valsInt, separateValsVal, slotDataString];
-            
-        }
-    }
-    
-    return [];
 }
 
 finalizeNotecardParse()
@@ -402,10 +371,10 @@ finalizeNotecardParse()
     for(x=0;x<=y;x++)
     {
         slotDataString = llList2String(outConst, x) + constTitleSep + llList2String(outVals, x);
-        if(~llSubStringIndex(slotDataString, "@|@nil"))
+        if(~llSubStringIndex(slotDataString, constTitleSep+"nil") && !~llSubStringIndex(slotDataString, "nil"+constTitleSep+"nil"))
         {
             // Temporary workaround for nilName bug.
-            integer inx = (llSubStringIndex(slotDataString, "@|@nil") + 3);
+            integer inx = (llSubStringIndex(slotDataString, constTitleSep+"nil") + 3);
             slotDataString = llDeleteSubString(slotDataString, inx, (inx + 2));
         }
         temp += [(string)slotDataString];
@@ -476,7 +445,7 @@ funcLoadSaveData(string data)
             slots = llListReplaceList(slots, [llDumpList2String(tmp, "@|@")], (integer)slot, (integer)slot);
 
             // Then replace that list with a separated list so we can find the name easier.
-            tmp = llListReplaceList(tmp, llParseStringKeepNulls(llList2String(tmp, 0), ["@|@"], []), 0, -1);
+            tmp = llListReplaceList(tmp, llParseStringKeepNulls(llList2String(tmp, 0), [(string)constTitleSep], []), 0, -1);
             //llOwnerSay(llDumpList2String(tmp, ", ")); //return;
             // Put the name in a string.
             string name = llList2String(llParseStringKeepNulls(llList2String(tmp, 1), ["t~t"], []), 0);
@@ -484,7 +453,7 @@ funcLoadSaveData(string data)
             names = llListReplaceList(names, [name], (integer)slot, (integer)slot);
             //llOwnerSay(llList2String(names, (integer)slot)); return;
             // Verify that we have indeed successfully saved the thing...
-            if(llList2String(names, (integer)slot) == name && llList2String(slots, (integer)slot) == llDumpList2String(tmp, "@|@"))
+            if(llList2String(names, (integer)slot) == name && llList2String(slots, (integer)slot) == llDumpList2String(tmp, constTitleSep))
             {
                 llOwnerSay("Character "+name+" has been saved successfully.");
                 return;
@@ -493,7 +462,7 @@ funcLoadSaveData(string data)
             {
                 llOwnerSay("Save fail.");
                 names = llListReplaceList(names, ["empty"], (integer)slot, (integer)slot);
-                slots = llListReplaceList(slots, [""], (integer)slot, (integer)slot);
+                slots = llListReplaceList(slots, ["nil"+constTitleSep+"nil"], (integer)slot, (integer)slot);
 
 
                 return;
