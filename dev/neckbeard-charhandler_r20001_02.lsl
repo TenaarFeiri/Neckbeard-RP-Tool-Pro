@@ -1,5 +1,11 @@
 // Character Handler by Tenaar Feiri
 // Rewritten from scratch.
+
+
+// NOTE: INVESTIGATE TITLER TO SEE OF nullNAME ARISES FROM THERE.
+
+
+
 /*
 Copyright (c) 2016, Martin Øverby (Tenaar Feiri)
 All rights reserved.
@@ -123,41 +129,51 @@ string strReplace(string source, string pattern, string replace) {
 
 sayOutSaveString()
 {
-	// Loop nested within funcBackupRestore.
-	// Outs all title values in separate chats.
-	// Indicate constant value with [cv]
-	// Indicate title value with [tv]
-	// Indicate switch to next char slot with [ns]
-	
-	list const;
-	list vals;
-	integer x = 0;
-	integer z = 0;
-	integer y = 7;
-	integer numSlots = (llGetListLength(slots) - 1);
-	for(;x<=numSlots;x++)
-	{
-		const = llParseString2List(llList2String(llParseString2List(llList2String(slots, x), ["@|@"], []), 0), ["c~c"], []);
-		vals = llParseString2List(llList2String(llParseString2List(llList2String(slots, x), ["@|@"], []), 1), ["t~t"], []);
-		for(z=0;z<=y;z++)
-		{
-			// Loop to output constants.
-			llOwnerSay("[cv]" + llList2String(const, z));
-		}
-		y = (llGetListLength(vals) - 1);
-		for(z=0;z<=y;z++)
-		{
-			llOwnerSay("[tv]" + llList2String(vals, z));
-		}
-		if(x != numSlots)
-		{
-			llOwnerSay("[ns]");
-		}
-		//const += [];
-	}
-	llOwnerSay("===END===");
-	
-	
+    // Loop nested within funcBackupRestore.
+    // Outs all title values in separate chats.
+    // Indicate constant value with [cv]
+    // Indicate title value with [tv]
+    // Indicate switch to next char slot with [ns]
+    
+    list const;
+    list vals;
+    integer x = 0;
+    integer z = 0;
+    integer y = 7;
+    integer numSlots = (llGetListLength(slots) - 1);
+    for(;x<=numSlots;x++)
+    {
+        const = llParseStringKeepNulls(llList2String(llParseStringKeepNulls(llList2String(slots, x), ["@|@"], []), 0), ["c~c"], []);
+        vals = llParseStringKeepNulls(llList2String(llParseStringKeepNulls(llList2String(slots, x), ["@|@"], []), 1), ["t~t"], []);
+        for(z=0;z<=y;z++)
+        {
+            string out = llList2String(const, z);
+            if(out != "" && out != " ")
+            {
+               // Loop to output constants.
+                llOwnerSay("\n[cv]" + out);
+            }
+            
+        }
+        y = (llGetListLength(vals) - 1);
+        for(z=0;z<=y;z++)
+        {
+            string out = llList2String(vals, z);
+            if(out != "" && out != " ")
+            {
+                llOwnerSay("\n[tv]" + out);
+            }
+            
+        }
+        if(x != numSlots)
+        {
+            llOwnerSay("\n[ns]");
+        }
+        //const += [];
+    }
+    llOwnerSay("===END===");
+    
+    
 }
 
 // Function to backup or restore data.
@@ -168,7 +184,7 @@ funcBackupRestore(string cN)
     {
         key owner = llGetOwner();
                     
-        string data;// = llDumpList2String(names, "\n") + "\n<!>"; //+ llDumpList2String(slots, "\n");
+        string data = "\n";// = llDumpList2String(names, "\n") + "\n<!>"; //+ llDumpList2String(slots, "\n");
         integer x = 0;
         integer y = (llGetListLength(names) - 1);
         for(;x<=y;x++)
@@ -176,10 +192,10 @@ funcBackupRestore(string cN)
             data += "[name]"+llList2String(names, x)+"\n";
         }
         data += "<!>";
-		llOwnerSay("===BEGIN===");
-		llOwnerSay(data);
-		sayOutSaveString();
-		return;
+        llOwnerSay("===BEGIN===");
+        llOwnerSay(data);
+        sayOutSaveString();
+        return;
         x = 0;
         y = (llGetListLength(slots) - 1);
         for(;x<=y;x++)
@@ -197,8 +213,8 @@ funcBackupRestore(string cN)
  
         string out = "Copy everything between START and END (including chatter names) \n ===START=== \n";
         
-		// Because of Second Life's limitations to object chat bytelength (1024 bytes ASCII or 512 bytes UTF characters),
-		// this has to be done in a very heavy-handed way.
+        // Because of Second Life's limitations to object chat bytelength (1024 bytes ASCII or 512 bytes UTF characters),
+        // this has to be done in a very heavy-handed way.
         llOwnerSay(out);
         llOwnerSay("\n" + llList2String(llParseString2List(data, ["<!>"], []), 0) + "<!>");
         list temp = llParseString2List(llList2String(llParseString2List(data, ["<!>"], []), 1), ["@@@"], []);
@@ -208,7 +224,7 @@ funcBackupRestore(string cN)
         {
             llOwnerSay("\n" + llList2String(temp, x));
         }
-		llOwnerSay("===END===");
+        llOwnerSay("===END===");
         
         
     }
@@ -246,10 +262,10 @@ funcParseLoadData(string data)
 {
     //llOwnerSay("Notecard output (pre-cut): " + data);
     
-	llOwnerSay("PARSELOADDATA DEBUG, LINE " + (string)line + ": " + data);
+    //llOwnerSay("PARSELOADDATA DEBUG, LINE " + (string)line + ": " + data);
     if(dataConstant)
-    {	// Begin legacy support for old notecard format.
-		list tmp = llParseString2List(llList2String(slots, posInList), ["@|@"], []);
+    {    // Begin legacy support for old notecard format.
+        list tmp = llParseString2List(llList2String(slots, posInList), ["@|@"], []);
         if(llGetSubString(data, 0, 6) == "[const]")
         {
             if(dataConstant != 2)
@@ -296,39 +312,144 @@ funcParseLoadData(string data)
     {
         if(posInList <= (llGetListLength(slots) - 1) && llGetSubString(data, 0, 5) == "[name]")
         {
-			//llOwnerSay("Received name: " + data);
+            //llOwnerSay("Received name: " + data);
             data = llStringTrim(llDeleteSubString(data, 0, 5), STRING_TRIM);
             //names = llListReplaceList(names, [data], posInList, posInList);
             if((llGetListLength(storedNames) - 1) < 12)
             {
                 storedNames += [data];
+                llOwnerSay("Stored names: " + llList2CSV(storedNames));
             }
         }
     }
     //llOwnerSay("Notecard output (post-cut): " + data);
 }
 
+list storedValues(integer valsInt, integer valsLength, integer separateValsVal)
+{
+    string slotDataString;
+    for( ; valsInt <= valsLength ; valsInt++)
+    {
+        if(llList2String(storedVals, valsInt) != "[ns]")
+        {
+            // Same deal as with constants.
+            if(valsInt != separateValsVal)
+            {
+                slotDataString += titleSep;
+            }
+            
+            slotDataString += llList2String(storedVals, valsInt);
+            //llOwnerSay("parsing vals:" + slotDataString);
+        }
+        else
+        {
+            // Once we reach [ns], progress separateValsVal.
+            separateValsVal = ( valsInt + 1 );
+            
+            // Then process to list and clear string.
+            return [valsInt, separateValsVal, slotDataString];
+            
+        }
+    }
+    
+    return ["null"];
+}
+
 finalizeNotecardParse()
 {
-	// constSep
-	// titleSep
-	integer slotsLength = (llGetListLength(slots) - 1);
-	integer constLength = (llGetListLength(storedConst) - 1);
-	integer valsLength = (llGetListLength(storedVals) - 1);
-	integer slotPosition = 0;
-	integer constInt = 0;
-	integer valsInt = 0;
-	integer separateConstVal = 0;
-	integer separateValsVal = 0;
-	list outVals;
-	string slotDataString;
-	// Update name list.
-	names = llListReplaceList(names, storedNames, 0, (llGetListLength(storedNames) - 1));
-	
-	// Then parse data.
-	
-	for( ; constInt <= constLength ; constInt++)
-	{
+    // constSep
+    // titleSep
+    integer slotsLength = (llGetListLength(slots) - 1);
+    integer constLength = (llGetListLength(storedConst) - 1);
+    integer valsLength = (llGetListLength(storedVals) - 1);
+    integer slotPosition = 0;
+    integer constInt = 0;
+    integer valsInt = 0;
+    integer separateConstVal = 0;
+    integer separateValsVal = 0;
+    //list outVals;
+    string slotDataString;
+    // Update name list.
+    names = llListReplaceList(names, storedNames, 0, (llGetListLength(storedNames) - 1));
+    llOwnerSay("Listed names: " + llList2CSV(names));
+    
+    
+    list outConst;
+    list outVals;
+    list temp;
+    string out;
+    integer x = 0;
+    integer makeSep = 0;
+    for(x=0;x<=constLength;x++)
+    {
+        string ln = llList2String(storedConst, x);
+        if(ln != "[ns]")
+        {
+            if(makeSep != 0)
+            {
+                out += constSep;
+            }
+            out += ln;
+            makeSep = 1;
+        }
+        else
+        {
+            outConst += [out];
+            out = "";
+            makeSep = 0;
+        }
+    }
+    makeSep = 0;
+    for(x=0;x<=valsLength;x++)
+    {
+        string ln = llList2String(storedVals, x);
+        if(ln != "[ns]")
+        {
+            if(makeSep != 0)
+            {
+                out += titleSep;
+            }
+            out += ln;
+            makeSep = 1;
+        }
+        else
+        {
+            outVals += [out];
+            out = "";
+            makeSep = 0;
+        }
+    }
+    x = 0;
+    integer y = (llGetListLength(outConst) - 1);
+    for(x=0;x<=y;x++)
+    {
+        out = llList2String(outConst, x) + constTitleSep + llList2String(outVals, x);
+        temp += [(string)out];
+    }
+    
+    // Upon completion of the nested loop, clear storedX values.
+    storedConst = [];
+    storedNames = [];
+    storedVals = [];
+    
+    // Then parse data into save slots, replacing them all.
+    if(llGetListLength(temp) < 13)
+    {
+            //slots = llListReplaceList(slots, temp, 0, -1);
+            slots = temp;
+            llOwnerSay("DEBUG MSG: NEW FORMAT LOOP COMPLETED");
+    }
+    else
+    {
+            llOwnerSay("DEBUG MSG: NEW FORMAT LOOP FAILED");
+    }
+    
+    return;
+    
+    // Then parse data.
+    
+    for( ; constInt <= constLength ; constInt++)
+    {
             // Utilize nested loops to parse data.
             // First we parse the constants, until [ns] shows up and tells us to switch to values.
             if(llList2String(storedConst, constInt) != "[ns]")
@@ -340,61 +461,49 @@ finalizeNotecardParse()
                 }
                 // Add data to string.
                 slotDataString += llList2String(storedConst, constInt);
+                //llOwnerSay("parsing const:" + slotDataString);
             }
             else
             {
                 // If we do encounter [ns] here, parse titles, and add to outVals.
                 // First we add the category separator to the string.
                 slotDataString += constTitleSep;
-                
-                // Then note down the separateConstVal.
-                separateConstVal = (constInt + 1);
-                
-                // Then begin loop.
-                for( ; valsInt <= valsLength ; valsInt++)
+                list in = storedValues(constInt, valsLength, separateConstVal);
+                if(llList2String(in, 0) == "null")
                 {
-                    if(llList2String(storedVals, valsInt) != "[ns]")
-                    {
-                        // Same deal as with constants.
-                        if(valsInt != separateValsVal)
-                        {
-                            slotDataString += titleSep;
-                        }
-                        
-                        slotDataString += llList2String(storedVals, valsInt);
-                    }
-                    else
-                    {
-                        // Once we reach [ns], progress separateValsVal.
-                        separateValsVal = ( valsInt + 1 );
-                        
-                        // Then process to list and clear string.
-                        if(llGetListLength(outVals) < 13)
-                        {
-                            outVals += [slotDataString];
-                        }
-                        slotDataString = "";
-                    }
+                    llOwnerSay("Aborting; List value = null.");
+                    return;
                 }
+                // Then note down the separateConstVal.
+                separateConstVal = llList2Integer(in, 1);
+                constInt = llList2Integer(in, 0);
+                slotDataString += llList2String(in, 2);
+                llOwnerSay(slotDataString);
+                return;
+                outVals += [slotDataString];
+                
+
             }
-	}
-	
-	// Upon completion of the nested loop, clear storedX values.
-	storedConst = [];
-	storedNames = [];
-	storedVals = [];
-	
-	// Then parse data into save slots, replacing them all.
-	if(llGetListLength(outVals) < 13)
-	{
-            slots = outVals;
+    }
+    
+    // Upon completion of the nested loop, clear storedX values.
+    storedConst = [];
+    storedNames = [];
+    storedVals = [];
+    
+    // Then parse data into save slots, replacing them all.
+    if(llGetListLength(outVals) < 13)
+    {
+            slots = llListReplaceList(slots, outVals, 0, -1);
+            llOwnerSay("OutVals: " + llList2CSV(outVals));
+            llOwnerSay("Slots: " + llList2CSV(slots));
             llOwnerSay("DEBUG MSG: NEW FORMAT LOOP COMPLETED");
-	}
-	else
-	{
+    }
+    else
+    {
             llOwnerSay("DEBUG MSG: NEW FORMAT LOOP FAILED");
         }
-	
+    
 }
 
 // Loads or saves data.
@@ -632,7 +741,7 @@ default
         {
             if(d == EOF)
             {
-				//finalizeNotecardParse();
+        finalizeNotecardParse();
                 llOwnerSay("Successfully restored backups.");
                 nc = NULL_KEY;
                 line = 0;
@@ -647,8 +756,8 @@ default
             {
                 if(d == "")
                 {
-					llOwnerSay("BREAK TRIGGERED!");
-					//return;
+                    llOwnerSay("BREAK TRIGGERED!");
+                    //return;
                     jump break;
                 }
                 if(!dataConstant && d == "<!>")
@@ -659,10 +768,10 @@ default
                     nc = llGetNotecardLine(cardname, line++);
                     return;
                 }
-				else
-				{
-					//llOwnerSay("DEBUG, LINE " + (string)line + ": " + d);
-				}
+                else
+                {
+                        //llOwnerSay("DEBUG, LINE " + (string)line + ": " + d);
+                }
                 funcParseLoadData(d);
                 @break;
                 nc = llGetNotecardLine(cardname, line++);
