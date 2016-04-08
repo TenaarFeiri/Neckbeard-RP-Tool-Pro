@@ -1,0 +1,13 @@
+## RP Tool Pro Changelog r20003
+
+- Updated backups system to new format allowing the usage of bigger save slots. Backwards compatibility will convert old cards to current format. (May need to edit slightly after loading.)
+
+- Removed a bunch of obsolete functions from the charhandler.
+
+- Updated several variables in the charhandler to utilize predefined globals instead of locals.
+
+- Did some minor cleanup on charhandler code.
+
+- Updated novalue/empty var from "null" to "nil". Charhandler should recursively change that for old cards. Not that it's necessary; it just helps the script identify novalues more easily.
+
+- Updated titler script to reflect novalue change from "null" to "nil".
