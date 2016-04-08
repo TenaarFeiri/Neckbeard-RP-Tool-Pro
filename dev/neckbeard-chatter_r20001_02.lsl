@@ -37,7 +37,16 @@ string funcName() // Outputs processed name.
     string name = curName;
     if(togglename)
     {
-        name = llStringTrim(llList2String(llParseString2List(name, [" "], []), 0), STRING_TRIM);
+        if(~llSubStringIndex(name, "$n")
+        {
+            // If a name tag is in use, shorten until the end of the name tag.
+            // Ignore all other name tags.
+            name = llStringTrim(llList2String(llParseString2List(name, ["$n"], []), 0), STRING_TRIM);
+        }
+        else
+        {
+            name = llStringTrim(llList2String(llParseString2List(name, [" "], []), 0), STRING_TRIM);
+        }
     }
     
    return name;

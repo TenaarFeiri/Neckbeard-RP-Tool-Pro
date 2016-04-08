@@ -1,7 +1,7 @@
 //    Neckbeard RP Tool Pro, by Tenaar Feiri.
 //    Using functions from: Erika Fluffy, 
 //    Started work: April 2nd, 2014
-//    Last Updated: March 31st, 2016
+//    Last Updated: April 8th, 2016
 //
 /*
 Copyright (c) 2016, Martin Øverby (Tenaar Feiri)
@@ -68,15 +68,13 @@ list titles = ["My name","My species","My mood","My status","My body","my scent"
         10 -> Maximum energy (used w/ postregen)
         
         11 -> Text colour.
-		
+        
 
 */
 
 string ooc = ""; // What msg to show if we're OOC.
 string afk = ""; // What msg to show if we're AFK.
 integer out = 0; // 0 = IC, 1 = OOC, 2 = AFK.
-integer regen = 0; // 0 = no regen, 1 = postregen, 2 = timed regen.
-integer regenTime; // How fast we'll regen. Cannot be 0.
 integer postRegenLast; // Last time we had a post regen.
 integer postRegenThrottle = 120; // How long we have to wait between each post for it to trigger post regen.
 integer showCap = TRUE; // Show the post regen cap.
@@ -273,6 +271,24 @@ funcUpdTitle(integer const, integer loc, string data) // Update either constant 
     }
 }
 
+string funcFindTag(string data)
+{
+    list tmp;
+    if(~llSubStringIndex(data, "$p"))
+    {
+        tmp = llParseString2List(data, ["$p"], []);
+        data = llDumpList2String(tmp, "\n");
+    }
+    else if(~llSubStringIndex(data, "$n"))
+    {
+        // Filter out $n from the name so it doesn't show in the titler.
+        tmp = llParseString2List(data, ["$n"], []);
+        data = llDumpList2String(tmp, " ");
+    }
+    
+    return data;
+}
+
 funcParseTitle() // Parse the title.
 {
     string tmp; // Temporary string.
@@ -296,8 +312,8 @@ funcParseTitle() // Parse the title.
         integer x; // Counter integer.
         for(x=0;x<=i;x++) // Begin loop!
         {
-            string constVal = llList2String(constants, x);
-            string titleVal = llList2String(titles, x);
+            string constVal = funcFindTag(llList2String(constants, x));
+            string titleVal = funcFindTag(llList2String(titles, x));
             if(constVal == "nil" && titleVal == "nil")
             {
                 jump break;
@@ -337,7 +353,7 @@ funcParseTitle() // Parse the title.
                 {
                     tmp = tmp + "%"; // Add % if exists & energy is shown.
                 }
-                else if(llList2String(titles, 8) != "on" && showCap && regen)
+                else if(llList2String(titles, 8) != "on" && showCap && llList2Integer(titles, 9) > 0)
                 {
                     tmp = tmp + " / " + llList2String(titles, 10);
                 }
@@ -435,13 +451,13 @@ integer strIsDecimal(string str)
 // Function for handling post regens!
 funcPostRegen()
 {
-    if(llList2String(titles, 7) == "nil" || !IsInteger(llList2String(titles, 7))) // Do not update the energy if it's hidden, or is not an integer.
+    if(llList2String(titles, 7) == "nil" || !IsInteger(llList2String(titles, 7)) || llList2Integer(titles, 9) == 0) // Do not update the energy if it's hidden, or is not an integer, or if regen is disabled.
     {
         return;
     }
 
     // If it's appropriate to update energy, and we actually are using postregen...
-    if(llGetUnixTime() > (postRegenLast + postRegenThrottle) && regen == 1)
+    if(llGetUnixTime() > (postRegenLast + postRegenThrottle))
     {
 
         
@@ -526,19 +542,6 @@ funcSaveLoadChar(string data)
             0, (llGetListLength(tmpD) - 1));
 
         // Then with that done, all we need to do is re-parse the titles!
-        if(llList2Integer(titles, 9) == 0 && llList2Integer(titles, 10) == 0)
-        {
-            // If not, check if we're currently doing a timed regen so we don't disrupt it.
-            if(regen != 2)
-            {
-                regen = 0;
-            }
-        }
-        else
-        {
-            regen = 1; // Set regen to post regen.
-        }
-
         funcParseTitle();
         llOwnerSay("Character "+llList2String(titles, 0)+" has been successfully loaded.");
         llMessageLinked(LINK_THIS, 1337, llList2String(titles, 0), ""); // Informs chatter of name change.
@@ -633,33 +636,6 @@ default
             llResetScript();
         }
     }
-
-    timer()
-    {
-        if(regen == 2 && !out) // If regen is set to timed regen...
-        {
-            if(llList2String(titles, 7) == "" || !IsInteger(llList2String(titles, 7))) // Do not update the energy if it's hidden, or is not an integer.
-            {
-                return;
-            }
-            integer regeneration = (llList2Integer(titles, 7) + llList2Integer(titles, 9)); // Calculate next regen value!
-
-            // If regeneration result is bigger than the max limit...
-            if(regeneration > llList2Integer(titles, 10))
-            {
-                // Set regeneration to the max limit.
-                regeneration = llList2Integer(titles, 10);
-            }
-            // Then update the energy value.
-            titles = llListReplaceList(titles, [(string)regeneration], 7, 7);
-            funcParseTitle();
-        }
-        else
-        {
-            llSetTimerEvent(0);
-        }
-    }
-    
 
     on_rez(integer start_param)
     {
@@ -790,61 +766,6 @@ default
                         }
                         titles = llListReplaceList(titles, [llList2String(temp, 0),llList2String(temp, 1)], 9, 10); // Update the titles list with the correct values.
         
-                        // Then see if we've disabled postregen...
-                        if(llList2Integer(titles, 9) == 0 && llList2Integer(titles, 10) == 0)
-                        {
-                            // If not, check if we're currently doing a timed regen so we don't disrupt it.
-                            if(regen != 2)
-                            {
-                                regen = 0;
-                            }
-                        }
-                        else
-                        {
-                            regen = 1; // Set regen to post regen.
-                        }
-                        if(showCap && llList2String(titles, 8) == "off")
-                        {
-                            funcParseTitle(); // Reparse the title if showCal is on and percent is off.
-                        }
-                    }
-                    else if(llGetSubString(llToLower(m), 0, 4) == "regen") // If we're using a regen command...
-                    {
-                        list temp; // Prepare temporary list.
-                        m = llDeleteSubString(m, 0, 4); // Clean the string.
-                        m = llStringTrim(m, STRING_TRIM_HEAD); // Trim leading and trailing spaces.
-                        temp = llParseString2List(m, [" "], []); // Parse the postregen values to a list.
-                        if(llGetListLength(temp) < 3 || llGetListLength(temp) > 3) // If the list length is smaller or higher than 2, something went wrong.
-                        {
-                            llOwnerSay("Failed to set the timed regen. Too many or too few values in command. Your command: "+command);
-                            return;
-                        }
-                        titles = llListReplaceList(titles, [llList2String(temp, 0),llList2String(temp, 1)], 9, 10); // Update the titles list with the correct values.
-                        if((string)((integer)((string)llList2Integer(temp, 2))) == llList2String(temp, 2))
-                        {
-                            regenTime = llList2Integer(temp, 2);
-                        }
-                        else
-                        {
-                            llOwnerSay("Failed to set the timed regen. Your timer is invalid. Your command: "+command);
-                            return;
-                        }
-                        
-                        
-                        // Then see if we've disabled postregen...
-                        if(llList2Integer(titles, 9) == 0 && llList2Integer(titles, 10) == 0)
-                        {
-                            // If not, check if we're currently doing a timed regen so we don't disrupt it.
-                            if(regen != 2)
-                            {
-                                regen = 0;
-                            }
-                        }
-                        else
-                        {
-                            regen = 2; // Set regen to post regen.
-                            llSetTimerEvent((float)regenTime);
-                        }
                         if(showCap && llList2String(titles, 8) == "off")
                         {
                             funcParseTitle(); // Reparse the title if showCal is on and percent is off.
@@ -887,15 +808,15 @@ default
                     // Toggle comma parsing!
                     else if(llToLower(m) == "comma")
                     {
-						
+                        
                         if(!isComma)
                         {
                             isComma = 1;
                         }
-						else if(isComma = 1)
-						{
-							isComma = 2;
-						}
+                        else if(isComma = 1)
+                        {
+                            isComma = 2;
+                        }
                         else
                         {
                             isComma = 0;

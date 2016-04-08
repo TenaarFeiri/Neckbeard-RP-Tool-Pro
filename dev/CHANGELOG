@@ -1,13 +1,62 @@
 ## RP Tool Pro Changelog r20003
 
-- Updated backups system to new format allowing the usage of bigger save slots. Backwards compatibility will convert old cards to current format. (May need to edit slightly after loading.)
 
-- Removed a bunch of obsolete functions from the charhandler.
+Charhandler changes:
+    - Updated backups system to new format allowing the usage of bigger save slots. Backwards compatibility will convert old cards to current format. (May need to edit slightly after loading.)
 
-- Updated several variables in the charhandler to utilize predefined globals instead of locals.
+    - Removed a bunch of obsolete functions from the charhandler.
 
-- Did some minor cleanup on charhandler code.
+    - Updated several variables in the charhandler to utilize predefined globals instead of locals.
 
-- Updated novalue/empty var from "null" to "nil". Charhandler should recursively change that for old cards. Not that it's necessary; it just helps the script identify novalues more easily.
+    - Did some minor cleanup on charhandler code.
 
-- Updated titler script to reflect novalue change from "null" to "nil".
+    - Updated novalue/empty var from "null" to "nil". Charhandler should recursively change that for old cards. Not that it's necessary; it just helps the script identify novalues more easily.
+
+
+Titler changes:
+
+    - Updated titler script to reflect novalue change from "null" to "nil".
+
+    - Fixed issue where "hide" wouldn't properly remove the OOC and AFK message.
+
+    - Began adding support for the use of tags to different effects. First implementation: "$p" for newline.
+
+    - Upgraded comma functionality to be toggleable. Toggles between separate line 1 & line 2, merge line 1 & 2 with comma, & merge line 1 and 2 without comma.
+
+    Ex. 1:
+
+    Name: Test
+    Species: Bird.
+    Mood: Good.
+    Status: OK.
+    Body: Healthy.
+    Scent: Clean.
+    Currently: Idle.
+    Energy: 100%
+
+
+    Ex. 2:
+
+    Name: Test, Species: Bird.
+    Mood: Good.
+    Status: OK.
+    Body: Healthy.
+    Scent: Clean.
+    Currently: Idle.
+    Energy: 100%
+
+
+    Ex. 3:
+
+    Name: Test Species: Bird.
+    Mood: Good.
+    Status: OK.
+    Body: Healthy.
+    Scent: Clean.
+    Currently: Idle.
+    Energy: 100%
+
+
+    - Fully removed the "/1 regen" command. Only "/1 postregen" remains in the tool now.
+
+    - Cleaned out obsolete code from the titler.
