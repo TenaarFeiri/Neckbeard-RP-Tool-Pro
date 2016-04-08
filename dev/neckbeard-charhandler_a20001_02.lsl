@@ -78,38 +78,6 @@ list paginateList( integer vIdxPag, list cards ){ // Handles listing of paginate
         llList2List( vLstRtn, -9, -7 ) + llList2List( vLstRtn, -12, -10 );
 }
 
-integer getStringBytes(string msg) {
-    //Definitions:
-    //msg == unescapable_chars + escapable_chars
-    //bytes == unescapable_bytes + escapable_bytes
-    //unescapable_bytes == unescapable_chars
- 
-    //s == unescapable_chars + (escapable_bytes * 3)
-    string s = llEscapeURL(msg);//uses 3 characters per byte escaped.
- 
-    //remove 1 char from each escapable_byte's triplet.
-    //t == unescapable_chars + (escapable_bytes * 2)
-    string t = (string)llParseString2List(s,["%"],[]);
- 
-    //return == (unescapable_chars * 2 + escapable_bytes * 4) - (unescapable_chars + (escapable_bytes * 3))
-    //return == unescapable_chars + escapable_bytes == unescapable_bytes + escapable_bytes
-    //return == bytes
-    return llStringLength(t) * 2 - llStringLength(s);
-}
-
-// For replacing things in the string.
-string strReplace(string source, string pattern, string replace) {
-    while (llSubStringIndex(source, pattern) > -1) {
-        integer len = llStringLength(pattern);
-        integer pos = llSubStringIndex(source, pattern);
-        if (llStringLength(source) == len) { source = replace; }
-        else if (pos == 0) { source = replace+llGetSubString(source, pos+len, -1); }
-        else if (pos == llStringLength(source)-len) { source = llGetSubString(source, 0, pos-1)+replace; }
-        else { source = llGetSubString(source, 0, pos-1)+replace+llGetSubString(source, pos+len, -1); }
-    }
-    return source;
-}
-
 sayOutSaveString()
 {
     // Loop nested within funcBackupRestore.
@@ -225,11 +193,7 @@ funcParseLoadData(string data)
                 dataConstant = 2; // When dataConstant = 2, lock to old format.
             }
             data = llStringTrim(llDeleteSubString(data, 0, 6), STRING_TRIM);
-            if(data == "null"+constTitleSep+"null")
-            {
-                data = "nil"+constTitleSep+"nil";
-            }
-            else if(data == "null")
+            if(data == "null"+constTitleSep+"null" || data == "null")
             {
                 data = "nil";
             }
@@ -243,11 +207,7 @@ funcParseLoadData(string data)
                 dataConstant = 2;
             }
             data = llStringTrim(llDeleteSubString(data, 0, 6), STRING_TRIM);
-            if(data == "null"+constTitleSep+"null")
-            {
-                data = "nil"+constTitleSep+"nil";
-            }
-            else if(data == "null")
+            if(data == "null"+constTitleSep+"null" || data == "null")
             {
                 data = "nil";
             }
@@ -297,6 +257,18 @@ finalizeNotecardParse()
 {
     // constSep
     // titleSep
+    
+    // Update name list.
+    names = llListReplaceList(names, storedNames, 0, (llGetListLength(storedNames) - 1));
+    if(dataConstant == 2)
+    {
+        // If we updated from the old notecard, just clear out the temporary storage lists and return;
+        // everything below is pointless to run & will only undo the data in the old-format notecards.
+        storedConst = [];
+        storedNames = [];
+        storedVals = [];
+        return;
+    }
     integer slotsLength = (llGetListLength(slots) - 1);
     integer constLength = (llGetListLength(storedConst) - 1);
     integer valsLength = (llGetListLength(storedVals) - 1);
@@ -305,19 +277,7 @@ finalizeNotecardParse()
     integer valsInt = 0;
     integer separateConstVal = 0;
     integer separateValsVal = 0;
-    //list outVals;
     string slotDataString;
-    // Update name list.
-    names = llListReplaceList(names, storedNames, 0, (llGetListLength(storedNames) - 1));
-    //llOwnerSay("Listed names: " + llList2CSV(names));
-    if(dataConstant == 2)
-    {
-        // Upon completion of the nested loop, clear storedX values.
-        storedConst = [];
-        storedNames = [];
-        storedVals = [];
-        return;
-    }
     
     list outConst;
     list outVals;
@@ -354,8 +314,6 @@ finalizeNotecardParse()
                 slotDataString += titleSep;
             }
             slotDataString += ln;
-            //llOwnerSay("Out progress: " + out);
-            llOwnerSay(ln);
             makeSep = 1;
         }
         else
@@ -398,11 +356,11 @@ finalizeNotecardParse()
             }
             
             slots = llListReplaceList(slots, temp, 0, y);
-            llOwnerSay("DEBUG MSG: NEW FORMAT LOOP COMPLETED");
+            //llOwnerSay("DEBUG MSG: NEW FORMAT LOOP COMPLETED");
     }
     else
     {
-            llOwnerSay("DEBUG MSG: NEW FORMAT LOOP FAILED");
+            llOwnerSay("Loading failed; Too many save slots in file: " + cardName);
     }
     
 }
@@ -442,7 +400,7 @@ funcLoadSaveData(string data)
             tmp = llList2List(tmp, 1, 1);
             //llOwnerSay(llDumpList2String(tmp, ", ")); return;
 
-            slots = llListReplaceList(slots, [llDumpList2String(tmp, "@|@")], (integer)slot, (integer)slot);
+            slots = llListReplaceList(slots, [llDumpList2String(tmp, constTitleSep)], (integer)slot, (integer)slot);
 
             // Then replace that list with a separated list so we can find the name easier.
             tmp = llListReplaceList(tmp, llParseStringKeepNulls(llList2String(tmp, 0), [(string)constTitleSep], []), 0, -1);
@@ -538,28 +496,6 @@ default
         {
             return;
         }
-        
-        /*if(c == pagination)
-        {
-            if (!llSubStringIndex( m, " " )){ //-- detects (hidden) leading space of page change buttons
-                llDialog( id,
-                    cardList(),
-                    paginateList( llStringLength( m ) + llSubStringIndex( m, "»" ) - 2 ),
-                    search );
-            }
-            else {
-                //-- button was not a page button, your code goes here,
-                //-- use (llListFindList( gLstMnu, (list)vStrMsg ) / 10) for remenu command if present
-                llGiveInventory(id, llList2String(card_Name, ((integer)m - 1)));
-        llRemoveInventory(llList2String(card_Name, ((integer)m - 1)));
-        
-            session = FALSE;
-                add_Cards();
-                cur_Usr = NULL_KEY;
-        llListenRemove(sHandler);
-        
-            } */
-
         if(c == 44)
         {
             // Check to see if we are actually hearing the commands of our owner & their HUD!
@@ -653,7 +589,7 @@ default
                 posInList = 0;
                 isBusy = FALSE;
                 cardname = defCardName;
-                llOwnerSay(llDumpList2String(slots, "\n"));
+                //llOwnerSay(llDumpList2String(slots, "\n"));
             }
             else
             {
