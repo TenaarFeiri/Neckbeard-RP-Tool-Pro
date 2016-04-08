@@ -143,7 +143,8 @@ funcBackupRestore(string cN)
             data += "[name]"+llList2String(names, x)+"\n";
         }
         data += "<!>";
-        llOwnerSay("===BEGIN===");
+        llOwnerSay("Copy the following into your notecard (including object names if you like)\n===BEGIN===");
+        llSleep(1); // Make sure previous OwnerSay is broadcast first!
         llOwnerSay(data);
         sayOutSaveString();
         
@@ -360,7 +361,7 @@ finalizeNotecardParse()
     }
     else
     {
-            llOwnerSay("Loading failed; Too many save slots in file: " + cardName);
+            llOwnerSay("Loading failed; Too many save slots in file: " + cardname);
     }
     
 }

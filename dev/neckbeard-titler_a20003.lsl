@@ -907,7 +907,7 @@ default
                         out = 1;
                         m = llDeleteSubString(m, 0, 2);
                         m = llStringTrim(m, STRING_TRIM);
-                        if(llToLower(m) == "none")
+                        if(llToLower(m) == "none" || llToLower(m) == "hide")
                         {
                             ooc = "";
                         }
@@ -922,7 +922,7 @@ default
                         out = 2;
                         m = llDeleteSubString(m, 0, 2);
                         m = llStringTrim(m, STRING_TRIM);
-                        if(llToLower(m) == "none")
+                        if(llToLower(m) == "none" || llToLower(m) == "hide")
                         {
                             afk = "";
                         }
