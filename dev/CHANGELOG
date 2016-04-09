@@ -19,7 +19,7 @@ Titler changes:
 
     - Fixed issue where "hide" wouldn't properly remove the OOC and AFK message.
 
-    - Began adding support for the use of tags to different effects. First implementation: "$p" for newline.
+    - Began adding support for the use of tags to different effects. First implementation: "$p" for newline; "$n" for togglenames.
 
     - Upgraded comma functionality to be toggleable. Toggles between separate line 1 & line 2, merge line 1 & 2 with comma, & merge line 1 and 2 without comma.
 
