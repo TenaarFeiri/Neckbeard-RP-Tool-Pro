@@ -1,7 +1,7 @@
 //    Neckbeard RP Tool Pro, by Tenaar Feiri.
 //    Using functions from: Erika Fluffy, 
 //    Started work: April 2nd, 2014
-//    Last Updated: April 8th, 2016
+//    Last Updated: April 9th, 2016
 //
 /*
 Copyright (c) 2016, Martin Øverby (Tenaar Feiri)
@@ -283,7 +283,7 @@ string funcFindTag(string data)
     {
         // Filter out $n from the name so it doesn't show in the titler.
         tmp = llParseString2List(data, ["$n"], []);
-        data = llDumpList2String(tmp, " ");
+        data = llDumpList2String(tmp, "");
     }
     
     return data;
