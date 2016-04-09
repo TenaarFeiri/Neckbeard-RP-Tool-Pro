@@ -1,7 +1,7 @@
 // Neckbeard Chatter
 // Handles chats.
 //
-// Last edit: April 2nd, 2016 - Tenaar Feiri
+// Last edit: April 9th, 2016 - Tenaar Feiri
 /*
 Copyright (c) 2016, Martin Øverby (Tenaar Feiri)
 All rights reserved.
@@ -18,7 +18,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 */
 
 
-string version = "r20001_02";
+string version = "r20001_03";
 
 string curName;
 
@@ -32,7 +32,7 @@ string funcName() // Outputs processed name.
     string name = curName;
     if(togglename)
     {
-        if(~llSubStringIndex(name, "$n")
+        if(~llSubStringIndex(name, "$n"))
         {
             // If a name tag is in use, shorten until the end of the name tag.
             // Ignore all other name tags.
@@ -98,47 +98,47 @@ funcDoSpeak(string post)
     else if(llGetSubString(post, 0, 0) == "'")
     {
         string charName = funcName();
-		if(llGetSubString(llToLower(post), 0, 1) == "'s" || llGetSubString(llToLower(post), 0, 0) == "'")
-		{
-			if(llToLower(llGetSubString(charName, -1, -1)) == "s")
-			{
-				llSetObjectName(charName+"'");
-				if(llGetSubString(post, 1, 1) == " " || llGetSubString(post, 1, 1) == "")
-				{
-					post = llStringTrim(llDeleteSubString(post, 0, 0), STRING_TRIM);
-				}
-				else
-				{
-					post = llStringTrim(llDeleteSubString(post, 0, 1), STRING_TRIM);
-				}
-
-			}
-			else
-			{
-				llSetObjectName(charName+"'s");
-				post = llStringTrim(llDeleteSubString(post, 0, 1), STRING_TRIM);
-
-			}
-		}
-		else
-		{
-			llSetObjectName(charName);
-		}
-		if(post == " " || post == "")
-		{
-			jump failed;
-		}
-        if(!whisper)
+        if(llGetSubString(llToLower(post), 0, 1) == "'s" || llGetSubString(llToLower(post), 0, 0) == "'")
         {
-			
-			llSay(0, "/me "+post);
-			
+            if(llToLower(llGetSubString(charName, -1, -1)) == "s")
+            {
+                llSetObjectName(charName+"'");
+                if(llGetSubString(post, 1, 1) == " " || llGetSubString(post, 1, 1) == "")
+                {
+                    post = llStringTrim(llDeleteSubString(post, 0, 0), STRING_TRIM);
+                }
+                else
+                {
+                    post = llStringTrim(llDeleteSubString(post, 0, 1), STRING_TRIM);
+                }
+
+            }
+            else
+            {
+                llSetObjectName(charName+"'s");
+                post = llStringTrim(llDeleteSubString(post, 0, 1), STRING_TRIM);
+
+            }
         }
         else
         {
-			
-			llWhisper(0,"/me "+ post);
-			
+            llSetObjectName(charName);
+        }
+        if(post == " " || post == "")
+        {
+            jump failed;
+        }
+        if(!whisper)
+        {
+            
+            llSay(0, "/me "+post);
+            
+        }
+        else
+        {
+            
+            llWhisper(0,"/me "+ post);
+            
         }
 
     }
@@ -147,10 +147,10 @@ funcDoSpeak(string post)
         llSetObjectName(funcName()+",");
         post = llDeleteSubString(post, 0, 0);
         post = llStringTrim(post, STRING_TRIM);
-		if(post == " " || post == "")
-		{
-			jump failed;
-		}
+        if(post == " " || post == "")
+        {
+            jump failed;
+        }
         if(!whisper)
         {
             llSay(0, "/me "+post);
@@ -173,7 +173,7 @@ funcDoSpeak(string post)
         }
     }
     llMessageLinked(LINK_THIS, 1331, "regen", NULL_KEY);
-	@failed;
+    @failed;
     llSetObjectName(savedName); // At the end of the chat, set object name back to default.
 
 }
