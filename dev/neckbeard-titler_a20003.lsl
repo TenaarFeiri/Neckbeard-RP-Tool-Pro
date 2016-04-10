@@ -340,7 +340,7 @@ funcParseTitle() // Parse the title.
                 {
                         tmp = tmp + " ";
                 }
-                else if(x == 0 && IsInteger(isComma) && (integer)isComma == 0) // If this is not the case...
+                else // If this is not the case...
                 {
                     tmp = tmp + "\n"; // Then we separate by way of linebreak.
                 }
@@ -817,15 +817,15 @@ default
                         {
                             if(isComma == "0")
                             {
-                                isComma = 1;
+                                isComma = "1";
                             }
                             else if(isComma == "1")
                             {
-                                isComma = 2;
+                                isComma = "2";
                             }
                             else if((integer)isComma >= 2)
                             {
-                                isComma = 0;
+                                isComma = "0";
                             }
                             
                             titles = llListReplaceList(titles, [(string)isComma], 12, 12);                            
