@@ -46,14 +46,14 @@ integer changeTitle; // To keep track of the channel we use for changing titles.
 integer changeTitleHandler; // Handler for the changeTitle channel.
 integer changeIt; // FALSE when selecting title/constant, TRUE when changing it.
 string selected; // Set when choosing a title/constant to change.
-integer isComma = 0; // 0 = line separation; 1 = comma separation; 2 = merge line 1 & 2 without comma.)
+//integer isComma = 0; // 0 = line separation; 1 = comma separation; 2 = merge line 1 & 2 without comma.)
 
 // ### Titler data ### //
 
 //vector color = <1,1,1>; // Colour for the titler text. Default is white.
 float alpha = 1.0; // Titler visibility.
 list constants = ["Name:","Species:","Mood:","Status:","Body:","Scent:","Currently:","Energy:"]; // List for our constants.
-list titles = ["My name","My species","My mood","My status","My body","my scent","my current action","100","on", "0", "100", "255,255,255"]; // List for our titles!
+list titles = ["My name","My species","My mood","My status","My body","my scent","my current action","100","on", "0", "100", "255,255,255", "0"]; // List for our titles!
 
 /*
 
@@ -67,7 +67,9 @@ list titles = ["My name","My species","My mood","My status","My body","my scent"
         
         10 -> Maximum energy (used w/ postregen)
         
-        11 -> Text colour.
+        11 -> Text colour,
+        
+        12 -> Comma
         
 
 */
@@ -310,6 +312,7 @@ funcParseTitle() // Parse the title.
         
         integer i = 7; // How many titles we'll be parsing through.
         integer x; // Counter integer.
+        string isComma = llList2String(titles, 12);
         for(x=0;x<=i;x++) // Begin loop!
         {
             string constVal = funcFindTag(llList2String(constants, x));
@@ -329,15 +332,15 @@ funcParseTitle() // Parse the title.
             tmp = tmp + constVal + " " + titleVal; // Add the title to the temporary string.
             if(x != i) // If x is not the last entry in the list...
             {
-                if(x == 0 && isComma == 1) // Check to see if x is exactly 0 and that comma is true.
+                if(x == 0 && IsInteger(isComma) && (integer)isComma == 1) // Check to see if x is exactly 0 and that comma is true.
                 {
                     tmp = tmp + ", "; // If comma is true, separate the two top titles by a comma instead of a linebreak.
                 }
-                else if(x == 0 && isComma == 2)
+                else if(x == 0 && IsInteger(isComma) && (integer)isComma == 2)
                 {
                         tmp = tmp + " ";
                 }
-                else // If this is not the case...
+                else if(x == 0 && IsInteger(isComma) && (integer)isComma == 0) // If this is not the case...
                 {
                     tmp = tmp + "\n"; // Then we separate by way of linebreak.
                 }
@@ -808,20 +811,26 @@ default
                     // Toggle comma parsing!
                     else if(llToLower(m) == "comma")
                     {
+                        string isComma = llList2String(titles, 12);
                         
-                        if(!isComma)
+                        if(IsInteger(isComma))
                         {
-                            isComma = 1;
+                            if(isComma == "0")
+                            {
+                                isComma = 1;
+                            }
+                            else if(isComma == "1")
+                            {
+                                isComma = 2;
+                            }
+                            else if((integer)isComma >= 2)
+                            {
+                                isComma = 0;
+                            }
+                            
+                            titles = llListReplaceList(titles, [(string)isComma], 12, 12);                            
+                            funcParseTitle();
                         }
-                        else if(isComma = 1)
-                        {
-                            isComma = 2;
-                        }
-                        else
-                        {
-                            isComma = 0;
-                        }
-                        funcParseTitle();
                     }
                     else if(llGetSubString(llToLower(m), 0, 2) == "ooc")
                     {
