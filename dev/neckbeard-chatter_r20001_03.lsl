@@ -43,6 +43,11 @@ string funcName() // Outputs processed name.
             name = llStringTrim(llList2String(llParseString2List(name, [" "], []), 0), STRING_TRIM);
         }
     }
+    else if(~llSubStringIndex(name, "$n"))
+    {
+        integer inx = llSubStringIndex(name, "$n");
+        name = llStringTrim(llDeleteSubString(name, inx, (inx + 1)), STRING_TRIM);
+    }
     
    return name;
 }

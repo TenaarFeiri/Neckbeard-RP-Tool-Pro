@@ -294,7 +294,7 @@ string funcFindTag(string data)
 funcParseTitle() // Parse the title.
 {
     string tmp; // Temporary string.
-    string nameVal = llList2String(titles, 0);
+    string nameVal = funcFindTag(llList2String(titles, 0));
     if(nameVal == "nil")
     {
         nameVal = "";

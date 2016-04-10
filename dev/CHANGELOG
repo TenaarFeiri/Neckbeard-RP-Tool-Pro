@@ -60,3 +60,5 @@ Titler changes:
     - Fully removed the "/1 regen" command. Only "/1 postregen" remains in the tool now.
 
     - Cleaned out obsolete code from the titler.
+    
+    - Fixed bug where titler and chatter would sometimes display tags instead of their intended effect.
