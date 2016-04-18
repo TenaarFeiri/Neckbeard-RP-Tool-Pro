@@ -1,4 +1,4 @@
-Written for version: r20001
+Written for version: r20003
 
 
 Hi there and thank you for considering the Neckbeard RP Tool Pro for your roleplaying needs.
@@ -58,6 +58,40 @@ But now you have probably noticed that the colon you say in the constant when it
 Now, what's this "Energy:", you might ask?
 That is supposed to be the power pool of your character. Kind of like MP from Final Fantasy, Mana from various other games, etc. Basically, its intended function is to be an indicator of how much energy your character has to do various things such as casting magic spells. That doesn't need to be its only function though; it can also be a health indicator, or indicate, well...  how much you have left of anything! The percent is optional, but we'll get to that a bit later in the tutorial when we get to energy management.
 You can also convert the energy title into a normal title just by giving it a value that's not a number, but that will disable regeneration, etc.
+
+
+--- THE TAG SYSTEM
+
+Did you know that as of r20003, you are able to use tags in your title? Tags are all preceded by a dollar sign, and then one letter. For example: $p
+By using tags, you can add much more customization to your titler.
+Presently in r20003, there is only support for one tag but you can easily add your own by editing the source code. More will be added over time.
+
+Tags: $p -> linebreak/newline; $n -> Indicate where in the name to stop when togglename is active (ex. "Samantha Amelia$n Boss" chats as "Samantha Amelia" instead of just "Samantha")
+
+Example of $p in action:
+
+        Name: My name
+        Species: My species
+        Mood: My mood
+        Status: My status
+        Body: My body
+        Scent: My scent
+        Currently: My current action
+        Energy: 100%
+        
+Typed: /1 name My name$pI've now made a linebreak.
+
+Result:
+
+        Name: My name
+        I've now made a linebreak.
+        Species: My species
+        Mood: My mood
+        Status: My status
+        Body: My body
+        Scent: My scent
+        Currently: My current action
+        Energy: 100%
 
 
 --- CAN I CUSTOMIZE THE TITLER'S APPEARANCE?
