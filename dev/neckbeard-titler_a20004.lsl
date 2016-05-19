@@ -22,7 +22,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 // ### Misc. Info Vars. ### //
 
-string version = "a20003"; // Our titler version.
+string version = "a20004"; // Our titler version.
 
 integer DEBUG = FALSE;
 
@@ -278,16 +278,30 @@ string funcFindTag(string data)
     list tmp;
     if(~llSubStringIndex(data, "$p"))
     {
-        tmp = llParseString2List(data, ["$p"], []);
-        data = llDumpList2String(tmp, "\n");
+        //tmp = llParseString2List(data, ["$p"], []);
+        //data = llDumpList2String(tmp, "\n");
+        do {
+        integer inx = llSubStringIndex(data, "$p");
+        integer enx = (inx + 1);
+        data = llDeleteSubString(data, inx, enx);
+        data = llInsertString(data, inx, "\n");
+        }
+        while(~llSubStringIndex(data, "$p"));
     }
     else if(~llSubStringIndex(data, "$n"))
     {
         // Filter out $n from the name so it doesn't show in the titler.
-        tmp = llParseString2List(data, ["$n"], []);
-        data = llDumpList2String(tmp, "");
-    }
-    
+        //tmp = llParseString2List(data, ["$n"], []);
+        //data = llDumpList2String(tmp, "");
+        do {
+        integer inx = llSubStringIndex(data, "$n");
+        integer enx = (inx + 1);
+        data = llDeleteSubString(data, inx, enx);
+        //data = llInsertString(data, inx, "\n");
+        }
+        while(~llSubStringIndex(data, "$n"));
+        
+    } 
     return data;
 }
 
