@@ -18,7 +18,10 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 */
 
 
-string version = "r20001_03";
+string version = "a20001_04";
+
+// Changelogs a20001_04
+// - Fixed OOC chat (channel 22) so the $n tag doesn't show up in the name.
 
 string curName;
 
@@ -250,8 +253,17 @@ default
                     return;
                 }
                 // Talk OOC!
-                string tmp = llGetObjectName();
-                llSetObjectName(curName+" ("+llKey2Name(llGetOwner())+") OOC");
+				string tmp = llGetObjectName();
+				string tmpNameOoc;
+				if(~llSubStringIndex(curName, "$n"))
+				{
+					tmpNameOoc = llStringTrim(llDeleteSubString(curName, llSubStringIndex(curName, "$n"), (llSubStringIndex(curName, "$n") + 1)), STRING_TRIM);
+				}
+				else
+				{
+					tmpNameOoc = curName;
+				}
+                llSetObjectName(tmpNameOoc+" ("+llKey2Name(llGetOwner())+") OOC");
                 llSay(0, m);
                 llSetObjectName(tmp); // At the end of the chat, set object name back to default.
             }
