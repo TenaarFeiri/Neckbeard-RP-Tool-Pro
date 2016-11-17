@@ -1,7 +1,7 @@
 //    Neckbeard RP Tool Pro, by Tenaar Feiri.
 //    Using functions from: Erika Fluffy, 
 //    Started work: April 2nd, 2014
-//    Last Updated: April 9th, 2016
+//    Last Updated: November 17th, 2016
 //
 /*
 Copyright (c) 2016, Martin Øverby (Tenaar Feiri)
@@ -22,7 +22,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 // ### Misc. Info Vars. ### //
 
-string version = "a20004"; // Our titler version.
+string version = "a20005"; // Our titler version.
 
 integer DEBUG = FALSE;
 
@@ -305,6 +305,26 @@ string funcFindTag(string data)
     return data;
 }
 
+string stripTags(string data)
+{
+	while(~llSubStringIndex(data, "$"))
+	{
+	// We'll want to strip tags from the savefile names.
+	// This loop runs while $ is still found in the string.
+	
+	// Find the first index of $ in the string.
+	integer tagBeginning = llSubStringIndex(data, "$");
+	
+	// Then remove it.
+	data = llDeleteSubString(data, tagBeginning, (tagBeginning + 1));
+		
+		// Rinse and repeat until loop returns false.
+	}
+	// Trim the string just in case we have preceding or succeeding whitespace.
+	return llStringTrim(data, STRING_TRIM);
+
+}
+
 funcParseTitle() // Parse the title.
 {
     string tmp; // Temporary string.
@@ -560,7 +580,7 @@ funcSaveLoadChar(string data)
 
         // Then with that done, all we need to do is re-parse the titles!
         funcParseTitle();
-        llOwnerSay("Character "+llList2String(titles, 0)+" has been successfully loaded.");
+        llOwnerSay("Character "+stripTags(llList2String(titles, 0))+" has been successfully loaded.");
         llMessageLinked(LINK_THIS, 1337, llList2String(titles, 0), ""); // Informs chatter of name change.
         // This will also remember post regen rates.
     }
@@ -620,11 +640,18 @@ default
                 funcSaveLoadChar(data);
             }
         }
-        else if(num == 4)
+        else if(num == 4) // Receives character data from charhandler and outputs into a dialog.
         {
             saveLoadHandle = llListen(saveload, "", llGetOwner(), "");
-            //llSetTimerEvent(120);
-            list tmp = llParseString2List(data, ["@@@"], []);
+			//llSetTimerEvent(120);
+		
+			// First we strip the tags from data.
+			data = stripTags(data);	
+					
+			// Then parse the string into a list.
+			list tmp = llParseString2List(data, ["@@@"], []);
+			
+			// Output the list to a dialog where a slot may be selected.
             llDialog(llGetOwner(), "Please select your slot:\n"+llList2String(tmp, 0), llParseString2List(llList2String(tmp, 1), [","], []) , saveload);
         }
         else if(num == 1331)
