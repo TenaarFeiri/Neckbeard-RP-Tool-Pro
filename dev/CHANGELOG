@@ -1,3 +1,15 @@
+## RP Tool Pro Changelog a20005
+
+Titler changes:
+	- Speculative fix for tags displaying in save/load dialog menu.
+	- Applied new stripTags() function to character selection dialog.
+	- Applied new stripTags() function to character successfully loaded msg.
+
+Chatter changes:
+	- Fixed chatter issue causing $n to display on character name when chatting to channel 22 (ooc chat).
+
+
+
 ## RP Tool Pro Changelog r20004
 
 Titler changes:
