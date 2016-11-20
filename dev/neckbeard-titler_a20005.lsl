@@ -925,7 +925,7 @@ default
                         {
                             faces = (integer)llList2String(tmp, 0);
                         }
-                        llSetObjectName(llList2String(titles, 0)+"'s Dice Roll (D"+(string)faces+")");
+                        llSetObjectName(stripTags(llList2String(titles, 0))+"'s Dice Roll (D"+(string)faces+")");
                         integer result = diceRoll(faces);
                         if(result > 0)
                         {
@@ -947,7 +947,7 @@ default
                         {
                             faces = (integer)llList2String(tmp, 0);
                         }
-                        llSetObjectName(llList2String(titles, 0)+"'s Private Dice Roll (D"+(string)faces+")");
+                        llSetObjectName(stripTags(llList2String(titles, 0))+"'s Private Dice Roll (D"+(string)faces+")");
                         integer result = diceRoll(faces);
                         if(result > 0)
                         {
