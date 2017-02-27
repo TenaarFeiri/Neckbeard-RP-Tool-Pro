@@ -20,15 +20,44 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 // For backups, we'll be using a list with the following format: charname, chardata
 list backups;
 
+// How we communicate.
+integer channel_id; // ID for our channel so we can track it and disable it.
+integer channel; // Channel number.
+
+
+// Booleans and integers
+integer what_action = 0; // 1 = backup, 2 = restore.
+
+
+// Menu lists
+string touch_menu_str = "What do you want to do?"
+list touch_menu = ["Backup", "Restore", "Cancel"];
+
+string confirm_action
+
 
 default
 {
 	state_entry()
 	{
-		llSay(0, "Hello, Avatar!");
+		// Init
 	}
-	touch_start(integer total_number)
+	touch_end(integer total_number)
 	{
-		llSay(0, "Touched: "+(string)total_number);
+		// I prefer using touch_end.
+		// touch_start is also acceptable.
+		
+		
+	}
+	listen(integer c, string n, key id, string m)
+	{
+		if(!channel_id || c != channel || !what_action)
+		{
+			// We don't want anything here to trigger if we're not expecting it.
+			return;
+		}
+		
+		
+		
 	}
 }
