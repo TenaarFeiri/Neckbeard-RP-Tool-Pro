@@ -209,7 +209,7 @@ integer diceRoll(integer faces)
     
     length = (llGetListLength(tmp) - 1);
     for(x=0;x<=length;x++) {
-        tmp = llListRandomize(tmp, 0);
+        tmp = llListRandomize(tmp, 1);
     }
     seed = 1;
     for(x=0;x<=length;x++) {
