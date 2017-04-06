@@ -28,7 +28,9 @@ integer DEBUG = FALSE;
 
 string name = "Neckbeard RP Tool - "; // Titler's name.
 
-// ### Functions for online connectivity ### //
+// Welcome message to send when starting the RP tool for the first time.
+string welcome_message = "Thank you for using the NBA RP Tool Pro! If you haven't already, please consider joining our group here as this is where you'll receive updates and support from: secondlife:///app/group/fbd3b4cb-8dca-6f36-679c-a3d0b44662a9/about \nGitHub link: https://github.com/TenaarFeiri/Neckbeard-RP-Tool-Pro\n\nIf you haven't yet, please consider donating L$ through the included donation object and/or leaving a review of our tool here: https://marketplace.secondlife.com/p/rptool/4898935"; 
+integer first_time = TRUE;
 
 key verID;
 
@@ -611,7 +613,8 @@ default
         funcParseTitle();
         llOwnerSay((string)llGetUsedMemory()+" bytes used.");
         llMessageLinked(LINK_THIS, 1337, llList2String(titles, 0), ""); // Informs chatter of name.
-        llOwnerSay("If you haven't already, please consider joining our group here as this is where you'll receive updates and support from: secondlife:///app/group/fbd3b4cb-8dca-6f36-679c-a3d0b44662a9/about \nGitHub link: https://github.com/TenaarFeiri/Neckbeard-RP-Tool-Pro");
+        llOwnerSay(welcome_message);
+		first_time = FALSE;
     }
 
     // Handles incoming link messages.
@@ -680,6 +683,10 @@ default
     {
         llListenRemove(saveLoadHandle);
         llMessageLinked(LINK_THIS, 1337, llList2String(titles, 0), ""); // Informs chatter of name.
+		if(!first_time)
+		{
+			llOwnerSay(welcome_message);
+		}		
     }
 
     listen(integer c, string n, key id, string m) // Listen to commands!
