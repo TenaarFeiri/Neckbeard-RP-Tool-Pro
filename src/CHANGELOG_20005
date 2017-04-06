@@ -1,0 +1,88 @@
+## RP Tool Pro Changelog r20005
+
+Titler changes:
+	- Speculative fix for tags displaying in save/load dialog menu.
+	- Applied new stripTags() function to character selection dialog.
+	- Applied new stripTags() function to character successfully loaded msg.
+	- Applied new stripTags() function to dice roll outputs, preventing tags from displaying in the object name when chatting dice results.
+	- Minor bugfix to dice rolls.
+
+Chatter changes:
+	- Fixed chatter issue causing $n to display on character name when chatting to channel 22 (ooc chat).
+	- Fixed chatter issue causing other $ tags to display in the character name during /4 chat.
+
+
+
+## RP Tool Pro Changelog r20004
+
+Titler changes:
+	- Fixed bug preventing $p tag adding a linebreak if last in the string.
+
+
+
+
+
+## RP Tool Pro Changelog r20003
+
+
+Charhandler changes:
+    - Updated backups system to new format allowing the usage of bigger save slots. Backwards compatibility will convert old cards to current format. (May need to edit slightly after loading.)
+
+    - Removed a bunch of obsolete functions from the charhandler.
+
+    - Updated several variables in the charhandler to utilize predefined globals instead of locals.
+
+    - Did some minor cleanup on charhandler code.
+
+    - Updated novalue/empty var from "null" to "nil". Charhandler should recursively change that for old cards. Not that it's necessary; it just helps the script identify novalues more easily.
+
+
+Titler changes:
+
+    - Updated titler script to reflect novalue change from "null" to "nil".
+
+    - Fixed issue where "hide" wouldn't properly remove the OOC and AFK message.
+
+    - Began adding support for the use of tags to different effects. First implementation: "$p" for newline; "$n" for togglenames.
+
+    - Upgraded comma functionality to be toggleable. Toggles between separate line 1 & line 2, merge line 1 & 2 with comma, & merge line 1 and 2 without comma.
+
+    Ex. 1:
+
+    Name: Test
+    Species: Bird.
+    Mood: Good.
+    Status: OK.
+    Body: Healthy.
+    Scent: Clean.
+    Currently: Idle.
+    Energy: 100%
+
+
+    Ex. 2:
+
+    Name: Test, Species: Bird.
+    Mood: Good.
+    Status: OK.
+    Body: Healthy.
+    Scent: Clean.
+    Currently: Idle.
+    Energy: 100%
+
+
+    Ex. 3:
+
+    Name: Test Species: Bird.
+    Mood: Good.
+    Status: OK.
+    Body: Healthy.
+    Scent: Clean.
+    Currently: Idle.
+    Energy: 100%
+
+
+    - Fully removed the "/1 regen" command. Only "/1 postregen" remains in the tool now.
+
+    - Cleaned out obsolete code from the titler.
+    
+    - Fixed bug where titler and chatter would sometimes display tags instead of their intended effect.
