@@ -1,0 +1,12 @@
+blue
+red
+green
+white
+black
+yellow
+purple
+aqua
+teal
+moccasin
+peachpuff
+khaki

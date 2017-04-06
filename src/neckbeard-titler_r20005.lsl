@@ -93,7 +93,10 @@ list colors = [
                 "yellow", "255,255,0",
                 "purple", "128,0,128",
                 "aqua", "0,255,255",
-                "teal", "128,255,255"
+                "teal", "128,255,255",
+                "moccasin", "225, 228, 181",
+                "peachpuff", "238, 203, 173",
+                "khaki", "240, 230, 140"
                 ];
 
 
@@ -304,21 +307,21 @@ string funcFindTag(string data)
 
 string stripTags(string data)
 {
-	while(~llSubStringIndex(data, "$"))
-	{
-	// We'll want to strip tags from the savefile names.
-	// This loop runs while $ is still found in the string.
-	
-	// Find the first index of $ in the string.
-	integer tagBeginning = llSubStringIndex(data, "$");
-	
-	// Then remove it.
-	data = llDeleteSubString(data, tagBeginning, (tagBeginning + 1));
-		
-		// Rinse and repeat until loop returns false.
-	}
-	// Trim the string just in case we have preceding or succeeding whitespace.
-	return llStringTrim(data, STRING_TRIM);
+    while(~llSubStringIndex(data, "$"))
+    {
+    // We'll want to strip tags from the savefile names.
+    // This loop runs while $ is still found in the string.
+    
+    // Find the first index of $ in the string.
+    integer tagBeginning = llSubStringIndex(data, "$");
+    
+    // Then remove it.
+    data = llDeleteSubString(data, tagBeginning, (tagBeginning + 1));
+        
+        // Rinse and repeat until loop returns false.
+    }
+    // Trim the string just in case we have preceding or succeeding whitespace.
+    return llStringTrim(data, STRING_TRIM);
 
 }
 
@@ -614,7 +617,7 @@ default
         llOwnerSay((string)llGetUsedMemory()+" bytes used.");
         llMessageLinked(LINK_THIS, 1337, llList2String(titles, 0), ""); // Informs chatter of name.
         llOwnerSay(welcome_message);
-		first_time = FALSE;
+        first_time = FALSE;
     }
 
     // Handles incoming link messages.
@@ -641,15 +644,15 @@ default
         else if(num == 4) // Receives character data from charhandler and outputs into a dialog.
         {
             saveLoadHandle = llListen(saveload, "", llGetOwner(), "");
-			//llSetTimerEvent(120);
-		
-			// First we strip the tags from data.
-			data = stripTags(data);	
-					
-			// Then parse the string into a list.
-			list tmp = llParseString2List(data, ["@@@"], []);
-			
-			// Output the list to a dialog where a slot may be selected.
+            //llSetTimerEvent(120);
+        
+            // First we strip the tags from data.
+            data = stripTags(data);    
+                    
+            // Then parse the string into a list.
+            list tmp = llParseString2List(data, ["@@@"], []);
+            
+            // Output the list to a dialog where a slot may be selected.
             llDialog(llGetOwner(), "Please select your slot:\n"+llList2String(tmp, 0), llParseString2List(llList2String(tmp, 1), [","], []) , saveload);
         }
         else if(num == 1331)
@@ -683,10 +686,10 @@ default
     {
         llListenRemove(saveLoadHandle);
         llMessageLinked(LINK_THIS, 1337, llList2String(titles, 0), ""); // Informs chatter of name.
-		if(!first_time)
-		{
-			llOwnerSay(welcome_message);
-		}		
+        if(!first_time)
+        {
+            llOwnerSay(welcome_message);
+        }        
     }
 
     listen(integer c, string n, key id, string m) // Listen to commands!

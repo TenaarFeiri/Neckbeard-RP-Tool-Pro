@@ -6,6 +6,7 @@ Titler changes:
 	- Applied new stripTags() function to character successfully loaded msg.
 	- Applied new stripTags() function to dice roll outputs, preventing tags from displaying in the object name when chatting dice results.
 	- Minor bugfix to dice rolls.
+	- Added new greeting that displays every time the tool is reset, gets a new owner or is attached.
 
 Chatter changes:
 	- Fixed chatter issue causing $n to display on character name when chatting to channel 22 (ooc chat).
