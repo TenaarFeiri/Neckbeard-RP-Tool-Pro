@@ -18,7 +18,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 */
 
 
-string version = "a20001_04";
+string version = "a20001_05";
 
 // Changelogs a20001_04
 // - Fixed OOC chat (channel 22) so the $n tag doesn't show up in the name.
@@ -52,7 +52,27 @@ string funcName() // Outputs processed name.
         name = llStringTrim(llDeleteSubString(name, inx, (inx + 1)), STRING_TRIM);
     }
     
-   return name;
+   return stripTags(name); // Strip tags not caught by the previous function.
+}
+
+string stripTags(string data)
+{
+	while(~llSubStringIndex(data, "$"))
+	{
+	// We'll want to strip tags from the savefile names.
+	// This loop runs while $ is still found in the string.
+	
+	// Find the first index of $ in the string.
+	integer tagBeginning = llSubStringIndex(data, "$");
+	
+	// Then remove it.
+	data = llDeleteSubString(data, tagBeginning, (tagBeginning + 1));
+		
+		// Rinse and repeat until loop returns false.
+	}
+	// Trim the string just in case we have preceding or succeeding whitespace.
+	return llStringTrim(data, STRING_TRIM);
+
 }
 
 // Function for speaking.
