@@ -1,3 +1,11 @@
+## RP tool Pro Changelog r20006
+
+Charhandler changes:
+	- Fixed issue causing charhandler to output unnecessary data when restoring backup.
+
+
+
+
 ## RP Tool Pro Changelog r20005
 
 Titler changes:

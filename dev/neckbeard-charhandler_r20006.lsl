@@ -579,7 +579,7 @@ default
         {
             if(d == EOF)
             {
-                llOwnerSay(llList2CSV(storedVals));
+                //llOwnerSay(llList2CSV(storedVals));
                 //return;
                 finalizeNotecardParse();
                 llOwnerSay("Successfully restored backups.");

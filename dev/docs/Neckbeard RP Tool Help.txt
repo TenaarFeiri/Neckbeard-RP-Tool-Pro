@@ -1,4 +1,4 @@
-Written for version: r20003
+Written for version: r20005
 
 
 Hi there and thank you for considering the Neckbeard RP Tool Pro for your roleplaying needs.
@@ -13,6 +13,47 @@ If you wish to skip the tutorial, hit CTRL+F & search for "##=> Functions" (with
 
 
 ##=> TUTORIAL!
+
+
+
+INDEX:
+(Ctrl+F and search for these titles)
+
+	--- HOW DO THE TITLES WORK?
+	
+	--- THE TAG SYSTEM
+	
+	--- CAN I CUSTOMIZE THE TITLER'S APPEARANCE AND HIDE/SHOW CONSTANTS & TITLES?
+	
+	--- DOES IT HAVE AN OOC AND AFK TAG?
+	
+	--- HOW DOES REGENERATION WORK?
+	
+	--- HOW DO I REMOVE THE PERCENTAGE SYMBOL FROM THE ENERGY BAR?
+	
+	--- HOW TO SHOW MY MAXIMUM AMOUNT OF ENERGY?
+	
+	--- HOW DO I CHECK FOR UPDATES?
+	
+	--- DO I NEED THE HUD TO ENJOY THE RP TOOL?
+	
+	--- I DON'T WANT TO SHOW MY CHARACTER'S FULL NAME WHEN CHATTING. IS THIS POSSIBLE?
+	
+	--- CAN I REDUCE CHATRANGE SOMEHOW?
+	
+	--- I NEED A NEW COPY OF THE HELP FILE!
+	
+	--- HOW DO I BACKUP & RESTORE CHARACTER SAVES?
+	
+	--- HOW DO I SAVE AND LOAD CHARACTERS?
+	
+	--- CAN I CHANGE THE CHANNEL I USE TO EDIT THE TITLER?
+	
+	--- HOW DO I MAKE MY CHARACTER TALK?
+
+
+
+
 
 When you attach the titler for the first time, you should see something like this above your avatar's head in white text:
 
@@ -94,7 +135,7 @@ Result:
         Energy: 100%
 
 
---- CAN I CUSTOMIZE THE TITLER'S APPEARANCE?
+--- CAN I CUSTOMIZE THE TITLER'S APPEARANCE AND HIDE/SHOW CONSTANTS & TITLES?
 
 Yes! The fantastic thing about the RP tool is that the titler's appearance is almost completely mutable! You can change the colours & layout a little bit. First let's talk about the most obvious!
 
@@ -161,6 +202,7 @@ Showcap will automatically be disabled if you use the energy line as a normal ti
 
 If you've been with us for a while, you'll notice that online update checks have been removed. This is because I can no longer support a server, and therefore the RP tool has been made local. While it is now Open Source, updates will only be delivered via the dedicated group for the RP Tool itself.
 You should have received an invitation to join it when you first attached your RP tool, but if not then you may find the link here: secondlife:///app/group/fbd3b4cb-8dca-6f36-679c-a3d0b44662a9/about
+You may also check our marketplace page here: https://marketplace.secondlife.com/p/rptool/4898935
 
 
 --- DO I NEED THE HUD TO ENJOY THE RP TOOL?
@@ -247,6 +289,7 @@ Channel 3 & 4 also comes with additional commands that will be explained here. T
 /4# xyz -> Generates a whisper saying xyz. Ex.: "/4# Hello!" -> "Amanda whispers, "Hello!""
 
 /4: xyz -> Generates a say emote saying xyz. Ex.: "/4: Blah!" -> "Amanda says, "Blah!""
+
 
 
 
