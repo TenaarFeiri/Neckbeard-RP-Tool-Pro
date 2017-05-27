@@ -390,7 +390,7 @@ funcParseTitle() // Parse the title.
                 {
                     tmp = tmp + "%"; // Add % if exists & energy is shown.
                 }
-                else if(llList2String(titles, 8) != "on" && showCap && llList2Integer(titles, 9) > 0)
+                else if(llList2String(titles, 8) != "on" && showCap && llList2Integer(titles, 9) >= 0)
                 {
                     tmp = tmp + " / " + llList2String(titles, 10);
                 }
