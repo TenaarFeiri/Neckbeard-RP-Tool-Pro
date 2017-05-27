@@ -26,6 +26,10 @@ string version = "a20006"; // Our titler version.
 
 integer DEBUG = FALSE;
 
+integer booted = FALSE;
+
+key owner_id;
+
 string name = "Neckbeard RP Tool - "; // Titler's name.
 
 // Welcome message to send when starting the RP tool for the first time.
@@ -617,7 +621,9 @@ default
         llOwnerSay((string)llGetUsedMemory()+" bytes used.");
         llMessageLinked(LINK_THIS, 1337, llList2String(titles, 0), ""); // Informs chatter of name.
         llOwnerSay(welcome_message);
-        first_time = FALSE;
+		first_time = FALSE;
+		booted = TRUE;
+		owner_id = llGetOwner();
     }
 
     // Handles incoming link messages.
@@ -686,7 +692,7 @@ default
     {
         llListenRemove(saveLoadHandle);
         llMessageLinked(LINK_THIS, 1337, llList2String(titles, 0), ""); // Informs chatter of name.
-        if(!first_time)
+        if(!first_time && booted && owner_id == llGetOwner())
         {
             llOwnerSay(welcome_message);
         }        

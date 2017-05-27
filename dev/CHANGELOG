@@ -2,7 +2,8 @@
 
 Charhandler changes:
 	- Fixed issue causing charhandler to output unnecessary data when restoring backup.
-
+	- Fixed issue causing maximum energy amount to remain hidden when postregen is set to 0.
+	- Fixed duplicate greeting message when attaching a new tool for the first time.
 
 
 
